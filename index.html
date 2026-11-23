@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mộc Giang — Quản trị Nhà hàng | 199 Hoàng Cầu, Đống Đa, Hà Nội</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. LOGIN SCREEN (#login-screen)
+       Adapted from Reference Screenshot 1 for Nhà hàng Mộc Giang
+       ======================================================================== -->
+  <section id="login-screen" class="screen-container">
+    <!-- Left Hero Panel (Deep Warm Wood Brown #3D1F0D) -->
+    <div class="login-hero-panel">
+      <!-- Top Brand Header -->
+      <div class="login-brand-header">
+        <div class="brand-logo-box">
+          <!-- Custom SVG Emblem + Official Mộc Giang Logo Image -->
+          <div class="brand-logo-img-wrap" title="Logo Nhà hàng Mộc Giang">
+            <img src="assets/logo.jpg" alt="Logo Nhà hàng Mộc Giang" />
+          </div>
+          <div class="brand-text-col">
+            <div class="brand-title-text">
+              <svg width="26" height="24" viewBox="0 0 36 32" fill="none" aria-hidden="true">
+                <path d="M3 29V6H10L17.5 17.5L21 12V29H15.5V19.5L11.5 25.5H10.5L6.5 19.5V29H3Z" fill="#D9A86C"/>
+                <path d="M18.5 19C17.8 11.2 22.8 4.2 33 2C33.2 11.5 29.2 17.6 21.5 19.8C19.8 21.5 18.8 23.6 18.2 26C17.9 23.2 18.1 21 18.5 19Z" fill="#6BA353"/>
+                <path d="M19 22C21.5 16.5 25.5 11.5 29.5 8.5" stroke="#FBF7EE" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span>MỘC GIANG</span>
+            </div>
+            <span class="brand-tagline-text">Hương vị cơm nhà - Đậm đà ly nước</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Headline & 4 Feature Items -->
+      <div class="login-hero-body">
+        <h1 class="login-hero-headline">
+          Quản lý công việc nhà hàng, gọn trong một nơi
+        </h1>
+        <p class="login-hero-subtext">
+          Hệ thống quản trị vận hành, theo dõi doanh thu đa kênh và kiểm soát chi phí cố định — biến động theo thời gian thực dành riêng cho Nhà hàng Mộc Giang.
+        </p>
+
+        <div class="login-feature-grid">
+          <div class="login-feature-item">
+            <span class="login-feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+            </span>
+            <span>Tổng quan nhà hàng</span>
+          </div>
+
+          <div class="login-feature-item">
+            <span class="login-feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </span>
+            <span>Báo cáo doanh thu</span>
+          </div>
+
+          <div class="login-feature-item">
+            <span class="login-feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span>Chi phí cố định</span>
+          </div>
+
+          <div class="login-feature-item">
+            <span class="login-feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </span>
+            <span>Chi phí biến động</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Copyright & Contact Info -->
+      <div class="login-hero-footer">
+        <div>© 2026 Nhà hàng Mộc Giang · 199 Hoàng Cầu, Đống Đa, Hà Nội</div>
+        <div>Hotline: 096 3689077 · Bảo lưu mọi quyền.</div>
+      </div>
+    </div>
+
+    <!-- Right Form Panel (Warm Cream Grid Notebook Texture) -->
+    <div class="login-form-panel">
+      <!-- Subtle Culinary & Botanical Watermarks (matching notebook sketch style) -->
+      <svg class="login-watermark wm-top-left" width="130" height="90" viewBox="0 0 130 90" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M20 55 C20 75, 80 75, 80 55 Z" />
+        <line x1="12" y1="55" x2="88" y2="55" />
+        <path d="M38 44 Q42 34 38 26" />
+        <path d="M50 42 Q54 32 50 22" />
+        <path d="M62 44 Q66 34 62 26" />
+      </svg>
+
+      <svg class="login-watermark wm-top-center" width="70" height="70" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 50 C14 26, 30 14, 52 12 C50 34, 38 50, 14 50 Z" />
+        <path d="M14 50 C26 38, 36 28, 52 12" />
+      </svg>
+
+      <svg class="login-watermark wm-bottom-left" width="120" height="110" viewBox="0 0 120 110" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="55" cy="55" r="34" />
+        <circle cx="55" cy="55" r="22" stroke-dasharray="4 3" />
+        <line x1="100" y1="22" x2="100" y2="88" />
+        <path d="M95 22 V42 C95 46 105 46 105 42 V22" />
+      </svg>
+
+      <svg class="login-watermark wm-right" width="110" height="100" viewBox="0 0 110 100" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M25 35 H75 V60 C75 76 62 86 50 86 C38 86 25 76 25 60 Z" />
+        <path d="M75 42 H84 C90 42 90 56 84 56 H75" />
+        <line x1="20" y1="88" x2="82" y2="88" />
+      </svg>
+
+      <!-- Top-Right Theme & Language Controls -->
+      <div class="login-top-controls">
+        <div class="control-pill" role="group" aria-label="Chế độ giao diện">
+          <button type="button" class="control-pill-btn theme-btn-light active" onclick="window.setAppTheme('light')" title="Giao diện Sáng">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+          <button type="button" class="control-pill-btn theme-btn-dark" onclick="window.setAppTheme('dark')" title="Giao diện Tối">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="control-pill" role="group" aria-label="Ngôn ngữ">
+          <button type="button" class="control-pill-btn lang-btn active" data-lang="vi" onclick="window.setAppLang('vi')">VI</button>
+          <button type="button" class="control-pill-btn lang-btn" data-lang="en" onclick="window.setAppLang('en')">EN</button>
+        </div>
+      </div>
+
+      <!-- Centered White Login Card -->
+      <div class="login-card">
+        <div class="login-card-header">
+          <h2 class="login-card-title">Đăng nhập</h2>
+          <div class="login-card-subtitle">
+            <span>Quản trị nhà hàng Mộc Giang</span>
+            <span class="dot"></span>
+            <span style="font-size: 0.82rem; color: var(--mg-text-muted);">199 Hoàng Cầu</span>
+          </div>
+        </div>
+
+        <form id="login-form" onsubmit="return window.handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="login-username">Tên đăng nhập</label>
+            <span class="form-helper">Dạng mã nhà hàng.tên, ví dụ mocgiang.quanly</span>
+            <div class="form-input-wrap">
+              <input
+                type="text"
+                id="login-username"
+                class="form-input"
+                value="mocgiang.admin1"
+                placeholder="mocgiang.quanly"
+                autocomplete="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Mật khẩu</label>
+            <div class="form-input-wrap">
+              <input
+                type="password"
+                id="login-password"
+                class="form-input"
+                value="mocgiang2026"
+                placeholder="•••••••••"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                id="toggle-password"
+                class="password-toggle-btn"
+                onclick="window.togglePasswordVisibility()"
+                aria-label="Hiện hoặc ẩn mật khẩu"
+                title="Hiện/ẩn mật khẩu"
+              >
+                <svg id="eye-icon-open" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-checkbox-group">
+            <input type="checkbox" id="login-remember" class="form-checkbox" checked />
+            <div>
+              <label class="form-checkbox-label" for="login-remember">Ghi nhớ đăng nhập trên máy này</label>
+              <div class="form-checkbox-helper">
+                Giữ đăng nhập tới 30 ngày (Quản trị: 7 ngày). Không chọn trên máy dùng chung.
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-login" class="btn-login-submit">
+            <span>Đăng nhập</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+
+        <div class="login-card-footer">
+          Quên mật khẩu? Liên hệ quản trị hệ thống Nhà hàng Mộc Giang (Hotline: <strong>096 3689077</strong>) để được đặt lại.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       2. DASHBOARD SCREEN (#dashboard-screen)
+       Matches Reference Screenshot 3 with ONLY 3 Main Sections:
+       1. Tổng quan
+       2. Doanh thu
+       3. Chi phí -> (Chi phí cố định, Chi phí biến động)
+       ======================================================================== -->
+  <div id="dashboard-screen" class="screen-container hidden">
+    <!-- Left Sidebar (Deep Warm Wood Brown #3D1F0D) -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-top">
+        <!-- Brand Header with Mộc Giang Logo -->
+        <div class="sidebar-brand">
+          <div class="sidebar-logo-thumb">
+            <img src="assets/logo.jpg" alt="Mộc Giang Logo" />
+          </div>
+          <div>
+            <div class="sidebar-brand-title">MỘC GIANG</div>
+            <div class="sidebar-brand-sub">Hương vị cơm nhà</div>
+          </div>
+        </div>
+
+        <!-- Primary Navigation: Strictly 3 Main Sections -->
+        <nav class="sidebar-nav" aria-label="Điều hướng chính">
+          <!-- 1. TỔNG QUAN -->
+          <button
+            type="button"
+            id="nav-overview"
+            class="nav-item active"
+            data-target="view-overview"
+            onclick="window.switchView('view-overview')"
+          >
+            <span class="nav-item-left">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              <span>Tổng quan</span>
+            </span>
+          </button>
+
+          <div class="sidebar-section-label">Nhà hàng</div>
+
+          <!-- 2. DOANH THU -->
+          <button
+            type="button"
+            id="nav-revenue"
+            class="nav-item"
+            data-target="view-revenue"
+            onclick="window.switchView('view-revenue')"
+          >
+            <span class="nav-item-left">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <span>Doanh thu</span>
+            </span>
+          </button>
+
+          <!-- 3. CHI PHÍ (Expandable Parent with 2 Sub-sections) -->
+          <div class="nav-group expanded" id="nav-group-expenses">
+            <button
+              type="button"
+              id="nav-expenses"
+              class="nav-item"
+              aria-expanded="true"
+              onclick="window.handleExpensesMenuClick()"
+            >
+              <span class="nav-item-left">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                  <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+                <span>Chi phí</span>
+              </span>
+              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div class="nav-submenu" id="submenu-expenses">
+              <button
+                type="button"
+                id="nav-expenses-fixed"
+                class="nav-subitem"
+                data-target="view-expenses-fixed"
+                onclick="window.switchView('view-expenses-fixed')"
+              >
+                <span class="nav-subitem-dot"></span>
+                <span>Chi phí cố định</span>
+              </button>
+              <button
+                type="button"
+                id="nav-expenses-variable"
+                class="nav-subitem"
+                data-target="view-expenses-variable"
+                onclick="window.switchView('view-expenses-variable')"
+              >
+                <span class="nav-subitem-dot"></span>
+                <span>Chi phí biến động</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer matching Reference Screenshot 3 -->
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-footer-link" onclick="window.alert('Gửi phản hồi kỹ thuật tới bộ phận vận hành Nhà hàng Mộc Giang (096 3689077).')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Báo lỗi</span>
+        </button>
+
+        <div class="sidebar-user-row">
+          <div class="sidebar-user-card">
+            <span class="user-avatar-badge">QT</span>
+            <div class="user-meta">
+              <div class="user-name" title="Quản trị Mộc Giang">Quản trị Mộc G...</div>
+              <div class="user-role">Quản trị nhà hàng</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="btn-logout"
+            class="btn-logout-icon"
+            onclick="window.logoutToLoginScreen()"
+            title="Đăng xuất về màn hình Đăng nhập"
+            aria-label="Đăng xuất"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <button type="button" class="sidebar-footer-link" onclick="window.switchView('view-overview')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Quản trị hệ thống</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Right Workspace: Topbar + Main Views -->
+    <div class="app-workspace">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <div>
+            <div class="topbar-title">Nhà hàng Mộc Giang (Nội bộ)</div>
+            <div class="topbar-subtitle">Cơ sở 199 Hoàng Cầu, Đống Đa, Hà Nội · Năm 2026</div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="branch-selector-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18"></path>
+              <path d="M5 21V7l8-4v18"></path>
+              <path d="M19 21V11l-6-4"></path>
+            </svg>
+            <span>Cơ sở</span>
+            <span class="branch-pill">199 Hoàng Cầu</span>
+          </div>
+
+          <div class="control-pill" role="group" aria-label="Chế độ giao diện">
+            <button type="button" class="control-pill-btn theme-btn-light active" onclick="window.setAppTheme('light')" title="Giao diện Sáng">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </button>
+            <button type="button" class="control-pill-btn theme-btn-dark" onclick="window.setAppTheme('dark')" title="Giao diện Tối">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="control-pill" role="group" aria-label="Ngôn ngữ">
+            <button type="button" class="control-pill-btn lang-btn active" data-lang="vi" onclick="window.setAppLang('vi')">VI</button>
+            <button type="button" class="control-pill-btn lang-btn" data-lang="en" onclick="window.setAppLang('en')">EN</button>
+          </div>
+
+          <button type="button" id="btn-notifications" class="notif-bell-btn" title="Thông báo vận hành nhà hàng">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="notif-badge">9+</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content Views Container -->
+      <main class="app-main">
+        <div id="view-overview" class="app-view active"></div>
+        <div id="view-revenue" class="app-view"></div>
+        <div id="view-expenses-fixed" class="app-view"></div>
+        <div id="view-expenses-variable" class="app-view"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Module Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/overview.js"></script>
+  <script src="js/revenue.js"></script>
+  <script src="js/expenses.js"></script>
+
+  <!-- Shell Navigation & Login Controller -->
+  <script>
+    (function () {
+      /**
+       * Switch active dashboard view and update sidebar navigation state
+       * @param {string} viewId - 'view-overview' | 'view-revenue' | 'view-expenses-fixed' | 'view-expenses-variable'
+       */
+      window.switchView = function (viewId) {
+        var validViews = [
+          'view-overview',
+          'view-revenue',
+          'view-expenses-fixed',
+          'view-expenses-variable'
+        ];
+        if (validViews.indexOf(viewId) === -1) {
+          viewId = 'view-overview';
+        }
+
+        // Ensure dashboard screen is visible when switching views
+        var loginScreen = document.getElementById('login-screen');
+        var dashboardScreen = document.getElementById('dashboard-screen');
+        if (loginScreen && dashboardScreen && dashboardScreen.classList.contains('hidden')) {
+          loginScreen.classList.add('hidden');
+          dashboardScreen.classList.remove('hidden');
+        }
+
+        // Toggle active class on .app-view containers
+        var views = document.querySelectorAll('.app-view');
+        for (var i = 0; i < views.length; i++) {
+          if (views[i].id === viewId) {
+            views[i].classList.add('active');
+          } else {
+            views[i].classList.remove('active');
+          }
+        }
+
+        // Reset sidebar states
+        var navOverview = document.getElementById('nav-overview');
+        var navRevenue = document.getElementById('nav-revenue');
+        var navExpenses = document.getElementById('nav-expenses');
+        var navGroupExpenses = document.getElementById('nav-group-expenses');
+        var navFixed = document.getElementById('nav-expenses-fixed');
+        var navVariable = document.getElementById('nav-expenses-variable');
+
+        if (navOverview) navOverview.classList.remove('active');
+        if (navRevenue) navRevenue.classList.remove('active');
+        if (navExpenses) navExpenses.classList.remove('active');
+        if (navFixed) navFixed.classList.remove('active');
+        if (navVariable) navVariable.classList.remove('active');
+
+        // Activate matching nav item & call corresponding render hook
+        if (viewId === 'view-overview') {
+          if (navOverview) navOverview.classList.add('active');
+          if (typeof window.renderOverview === 'function') {
+            window.renderOverview();
+          }
+        } else if (viewId === 'view-revenue') {
+          if (navRevenue) navRevenue.classList.add('active');
+          if (typeof window.renderRevenue === 'function') {
+            window.renderRevenue();
+          }
+        } else if (viewId === 'view-expenses-fixed') {
+          if (navExpenses) navExpenses.classList.add('active');
+          if (navGroupExpenses) navGroupExpenses.classList.add('expanded');
+          if (navFixed) navFixed.classList.add('active');
+          if (typeof window.renderFixedExpenses === 'function') {
+            window.renderFixedExpenses();
+          }
+        } else if (viewId === 'view-expenses-variable') {
+          if (navExpenses) navExpenses.classList.add('active');
+          if (navGroupExpenses) navGroupExpenses.classList.add('expanded');
+          if (navVariable) navVariable.classList.add('active');
+          if (typeof window.renderVariableExpenses === 'function') {
+            window.renderVariableExpenses();
+          }
+        }
+      };
+
+      /**
+       * Clicking "Chi phí" parent item expands submenu and opens Chi phí cố định if not already in an expense view
+       */
+      window.handleExpensesMenuClick = function () {
+        var group = document.getElementById('nav-group-expenses');
+        var fixedView = document.getElementById('view-expenses-fixed');
+        var variableView = document.getElementById('view-expenses-variable');
+        var isInExpenses =
+          (fixedView && fixedView.classList.contains('active')) ||
+          (variableView && variableView.classList.contains('active'));
+
+        if (!isInExpenses) {
+          if (group) group.classList.add('expanded');
+          window.switchView('view-expenses-fixed');
+        } else if (group) {
+          group.classList.toggle('expanded');
+        }
+      };
+
+      /**
+       * Handle Login form submission -> transitions to Dashboard screen
+       */
+      window.handleLoginSubmit = function (event) {
+        if (event && event.preventDefault) event.preventDefault();
+        var loginScreen = document.getElementById('login-screen');
+        var dashboardScreen = document.getElementById('dashboard-screen');
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (dashboardScreen) dashboardScreen.classList.remove('hidden');
+        window.switchView('view-overview');
+        return false;
+      };
+
+      /**
+       * Handle Logout button click -> returns to Login screen
+       */
+      window.logoutToLoginScreen = function () {
+        var loginScreen = document.getElementById('login-screen');
+        var dashboardScreen = document.getElementById('dashboard-screen');
+        if (dashboardScreen) dashboardScreen.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
+      };
+
+      /**
+       * Toggle Password input visibility on Login screen
+       */
+      window.togglePasswordVisibility = function () {
+        var pwdInput = document.getElementById('login-password');
+        if (!pwdInput) return;
+        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+      };
+
+      /**
+       * Light / Dark theme toggle
+       */
+      window.setAppTheme = function (mode) {
+        var isDark = mode === 'dark';
+        document.body.classList.toggle('dark-theme', isDark);
+        var lightBtns = document.querySelectorAll('.theme-btn-light');
+        var darkBtns = document.querySelectorAll('.theme-btn-dark');
+        for (var i = 0; i < lightBtns.length; i++) {
+          lightBtns[i].classList.toggle('active', !isDark);
+        }
+        for (var j = 0; j < darkBtns.length; j++) {
+          darkBtns[j].classList.toggle('active', isDark);
+        }
+      };
+
+      /**
+       * VI / EN pill toggle
+       */
+      window.setAppLang = function (lang) {
+        var btns = document.querySelectorAll('.lang-btn');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].classList.toggle('active', btns[i].getAttribute('data-lang') === lang);
+        }
+      };
+
+      // Pre-render all views on DOMContentLoaded so DOM containers are always populated
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof window.renderOverview === 'function') window.renderOverview();
+        if (typeof window.renderRevenue === 'function') window.renderRevenue();
+        if (typeof window.renderFixedExpenses === 'function') window.renderFixedExpenses();
+        if (typeof window.renderVariableExpenses === 'function') window.renderVariableExpenses();
+      });
+    })();
+  </script>
+</body>
+</html>
