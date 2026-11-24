@@ -1333,13 +1333,14 @@ body.dark-theme .form-input {
    4. GOOGLE FORM & GOOGLE DRIVE SYNC BANNER, FORM/CONFIG MODALS & LIGHTBOX
    ========================================================================== */
 
-/* Google Form & Google Drive Sync Banner */
+/* Google Form & Google Drive Sync Banner (Hidden per user request after sync completion) */
+.mg-gdrive-live-bar,
 .mg-gdrive-banner,
 .gdrive-sync-banner,
 .gdrive-sync-bar,
 .google-sync-bar,
 .exp-gdrive-bar {
-  display: flex;
+  display: none !important;
   align-items: center;
   justify-content: space-between;
   gap: 16px;

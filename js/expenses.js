@@ -2097,80 +2097,10 @@
     `;
   }
 
-  function buildGoogleDriveLiveBar(activeType, data) {
-    const cfg = data.googleConfig;
-    const totalEntries = data.submissions.length;
-
-    return `
-      <div class="mg-gdrive-live-bar">
-        <div class="mg-gdrive-info">
-          <div class="mg-gdrive-title-row">
-            <span class="mg-gdrive-status-badge">
-              <span>🟢</span>
-              <span>Google Form · Sheet &amp; Drive Live (${cfg.accountEmail})</span>
-            </span>
-            <div class="mg-gdrive-links">
-              <a class="mg-gdrive-link-pill"
-                 href="${cfg.spreadsheetUrl}"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 title="Mở Google Sheet chứa dữ liệu phản hồi Google Form">
-                📊 Mở Google Sheet dữ liệu ↗
-              </a>
-              <a class="mg-gdrive-link-pill"
-                 href="${cfg.driveFolderUrl}"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 title="Mở thư mục Google Drive chứa ảnh chụp minh chứng chi phí">
-                📁 Mở Drive Ảnh minh chứng ↗
-              </a>
-              ${
-                cfg.formUrl
-                  ? `<a class="mg-gdrive-link-pill"
-                        href="${cfg.formUrl}"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                       📝 Mở Google Form ↗
-                     </a>`
-                  : ''
-              }
-            </div>
-          </div>
-          <div class="mg-gdrive-meta">
-            ${
-              state.syncStatusMessage
-                ? `<strong style="color:#2E6B22;">${state.syncStatusMessage}</strong> · `
-                : ''
-            }
-            Đã đồng bộ <strong>${totalEntries} phiếu chi &amp; ảnh minh chứng</strong> ·
-            Cập nhật: <span>${cfg.lastSync}</span>
-          </div>
-        </div>
-
-        <div class="mg-gdrive-actions">
-          <button type="button"
-                  class="mg-gdrive-btn"
-                  data-action="sync-gdrive"
-                  ${state.isSyncing ? 'disabled' : ''}>
-            <span>${state.isSyncing ? '⏳' : '🔄'}</span>
-            <span>${state.isSyncing ? 'Đang đồng bộ...' : 'Đồng bộ từ Google Drive'}</span>
-          </button>
-
-          <button type="button"
-                  class="mg-gdrive-btn primary"
-                  data-action="open-expense-form"
-                  data-default-type="${activeType}">
-            <span>+ Nhập phiếu chi / Up ảnh minh chứng (Form)</span>
-          </button>
-
-          <button type="button"
-                  class="mg-gdrive-btn accent"
-                  data-action="open-gdrive-config">
-            <span>⚙️ Cấu hình Google Form &amp; Sheet</span>
-          </button>
-        </div>
-      </div>
-    `;
+  function buildGoogleDriveLiveBar() {
+    // Hidden per user request ("tôi đã đồng bộ xong nên hãy ẩn phần này đi cho đẹp")
+    // Background sync via window.syncFromGoogleDrive remains active.
+    return '';
   }
 
   // ============================================================================
@@ -4255,6 +4185,14 @@
     try {
       window.renderFixedExpenses();
       window.renderVariableExpenses();
+      if (typeof window.syncFromGoogleDrive === 'function') {
+        Promise.resolve(window.syncFromGoogleDrive({ silent: true }))
+          .then(() => {
+            window.renderFixedExpenses();
+            window.renderVariableExpenses();
+          })
+          .catch(() => {});
+      }
     } catch (err) {
       console.error('[MocGiang Expenses] Render error:', err);
     }
