@@ -1875,6 +1875,106 @@ body.dark-theme .exp-type-radio-card.active {
   object-fit: contain;
 }
 
+/* ==========================================================================
+   5. REVENUE SUB-TABS (THEO HÌNH THỨC & THEO MÓN) & DISH RANKING UTILITIES
+   ========================================================================== */
+
+.mg-rev-subnav,
+.rev-subtab-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--mg-cream-alt);
+  border: 1px solid var(--mg-border);
+  padding: 5px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.rev-subtab-btn,
+.mg-rev-tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--mg-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+}
+
+.rev-subtab-btn:hover,
+.mg-rev-tab-btn:hover {
+  color: var(--mg-text-main);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.rev-subtab-btn.active,
+.mg-rev-tab-btn.active {
+  background: var(--mg-brown-900);
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(61, 31, 13, 0.22);
+}
+
+.dish-rank-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mg-cream-alt);
+  color: var(--mg-text-secondary);
+  border: 1px solid var(--mg-border);
+}
+
+.dish-rank-badge.rank-1 {
+  background: linear-gradient(135deg, #F5B935 0%, #D98A16 100%);
+  color: #281307;
+  border-color: #D98A16;
+}
+
+.dish-rank-badge.rank-2 {
+  background: linear-gradient(135deg, #E2E6EC 0%, #B8C1CE 100%);
+  color: #1F2630;
+  border-color: #B8C1CE;
+}
+
+.dish-rank-badge.rank-3 {
+  background: linear-gradient(135deg, #E2A778 0%, #B8733E 100%);
+  color: #281307;
+  border-color: #B8733E;
+}
+
+.dish-share-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 120px;
+}
+
+.dish-share-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mg-cream-alt);
+  overflow: hidden;
+}
+
+.dish-share-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--mg-green-700);
+  transition: width 0.3s ease;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1180px) {
   .kpi-grid,
