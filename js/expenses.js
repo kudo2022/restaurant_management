@@ -252,167 +252,119 @@
     monthlyRevenue: 13.48,
 
     fixed: {
-      totalMonth: 118.0,
-      daysInMonth: 30,
+      totalMonth: 1.365,
+      daysInMonth: 5,
       categories: [
+        {
+          id: 'depreciation',
+          name: 'Khấu hao thiết bị & Bảo trì định kỳ',
+          shortName: 'Dụng cụ & Thiết bị pha chế',
+          percent: 94.1,
+          amount: 1.285,
+          vndAmount: 1285000,
+          color: '#D97724',
+          note: 'Thảm bar, ca đong, máy đánh bọt, bình lắc, bình đựng trà 1L/2.1L, bình đường sữa, xúc đá, vét, vá, thìa bar'
+        },
+        {
+          id: 'insurance_security',
+          name: 'Bảo hiểm, An ninh & Vệ sinh cố định',
+          shortName: 'Vật tư & Vệ sinh cố định',
+          percent: 5.9,
+          amount: 0.080,
+          vndAmount: 80000,
+          color: '#8C5A3C',
+          note: 'Giấy chống tràn & vật tư vệ sinh quầy nước cố định'
+        },
         {
           id: 'rent',
           name: 'Thuê mặt bằng (199 Hoàng Cầu)',
           shortName: 'Thuê mặt bằng',
-          percent: 42,
-          amount: 49.56,
-          vndAmount: 49560000,
+          percent: 0,
+          amount: 0,
+          vndAmount: 0,
           color: '#3D1F0D',
-          note: 'Thanh toán tiền thuê mặt bằng 3 tầng tại 199 Hoàng Cầu, Đống Đa, Hà Nội'
+          note: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
         },
         {
           id: 'salary_fixed',
           name: 'Lương nhân sự cố định (Bếp & Quản lý)',
           shortName: 'Lương nhân sự cố định',
-          percent: 33,
-          amount: 38.94,
-          vndAmount: 38940000,
+          percent: 0,
+          amount: 0,
+          vndAmount: 0,
           color: '#2E6B22',
-          note: 'Bếp trưởng, 4 đầu bếp cơm nhà, 2 pha chế chính, 1 quản lý cơ sở'
-        },
-        {
-          id: 'depreciation',
-          name: 'Khấu hao thiết bị & Bảo trì định kỳ',
-          shortName: 'Khấu hao & Bảo trì',
-          percent: 11,
-          amount: 12.98,
-          vndAmount: 12980000,
-          color: '#D97724',
-          note: 'Khấu hao bếp công nghiệp, tủ mát, máy pha trà & nội thất gỗ'
+          note: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
         },
         {
           id: 'pos_internet',
           name: 'Phần mềm POS, Internet & Bản quyền',
           shortName: 'POS & Internet',
-          percent: 8,
-          amount: 9.44,
-          vndAmount: 9440000,
+          percent: 0,
+          amount: 0,
+          vndAmount: 0,
           color: '#2B7BBB',
-          note: 'Phần mềm quản lý bán hàng POS, hóa đơn điện tử & cáp quang doanh nghiệp'
-        },
-        {
-          id: 'insurance_security',
-          name: 'Bảo hiểm, An ninh & Vệ sinh cố định',
-          shortName: 'Bảo hiểm & An ninh',
-          percent: 6,
-          amount: 7.08,
-          vndAmount: 7080000,
-          color: '#8C5A3C',
-          note: 'BHXH nhân sự chính thức, phí PCCC, an ninh & vệ sinh môi trường đô thị'
+          note: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
         }
       ],
       dailyRecords: [
         {
-          date: '01/11',
-          fullDate: '01/11/2026',
-          amount: 49.56,
-          vndAmount: 49560000,
-          code: 'CPCĐ-1101',
-          categoryId: 'rent',
-          categoryName: 'Thuê mặt bằng (199 Hoàng Cầu)',
-          description: 'Thanh toán tiền thuê mặt bằng tháng 11/2026 (Tầng 1–3 tại 199 Hoàng Cầu)',
-          approvedBy: 'Quản trị Mộc Giang',
-          status: 'Đã đồng bộ Sheet'
-        },
-        {
-          date: '03/11',
-          fullDate: '03/11/2026',
-          amount: 5.44,
-          vndAmount: 5440000,
-          code: 'CPCĐ-1103',
-          categoryId: 'pos_internet',
-          categoryName: 'Phần mềm POS, Internet & Bản quyền',
-          description: 'Phí gia hạn iPOS, chữ ký số, cáp quang Viettel doanh nghiệp',
-          approvedBy: 'Nguyễn Thu Hà',
-          status: 'Đã đồng bộ Sheet'
-        },
-        {
-          date: '05/11',
-          fullDate: '05/11/2026',
-          amount: 18.50,
-          vndAmount: 18500000,
-          code: 'CPCĐ-1105',
-          categoryId: 'salary_fixed',
-          categoryName: 'Lương nhân sự cố định (Bếp & Quản lý)',
-          description: 'Tạm ứng lương cố định đợt 1 cho Bếp trưởng, Bếp chính & Quản lý ca',
-          approvedBy: 'Quản trị Mộc Giang',
-          status: 'Đã đồng bộ Sheet'
-        },
-        {
-          date: '08/11',
-          fullDate: '08/11/2026',
-          amount: 4.20,
-          vndAmount: 4200000,
-          code: 'CPCĐ-1108',
-          categoryId: 'insurance_security',
-          categoryName: 'Bảo hiểm, An ninh & Vệ sinh cố định',
-          description: 'Phí vệ sinh môi trường, bảo vệ trông xe phố Hoàng Cầu',
-          approvedBy: 'Nguyễn Thu Hà',
-          status: 'Đã đồng bộ Sheet'
-        },
-        {
-          date: '10/11',
-          fullDate: '10/11/2026',
-          amount: 6.48,
-          vndAmount: 6480000,
-          code: 'CPCĐ-1110',
+          date: '17/11',
+          fullDate: '17/11/2026',
+          amount: 0.326,
+          vndAmount: 326000,
+          code: 'CPCĐ-1117',
           categoryId: 'depreciation',
           categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ',
-          description: 'Bảo dưỡng hệ thống hút mùi bếp, tủ đông & nồi cơm niêu công nghiệp',
-          approvedBy: 'Trần Quốc Tuấn',
-          status: 'Đã đồng bộ Sheet'
-        },
-        {
-          date: '15/11',
-          fullDate: '15/11/2026',
-          amount: 20.44,
-          vndAmount: 20440000,
-          code: 'CPCĐ-1115',
-          categoryId: 'salary_fixed',
-          categoryName: 'Lương nhân sự cố định (Bếp & Quản lý)',
-          description: 'Quyết toán lương cố định đợt 2 & phụ cấp trách nhiệm nhân sự biên chế',
-          approvedBy: 'Quản trị Mộc Giang',
+          description: 'Thảm bar (80 000) + Ca đong 100ml & 250ml (46 000) + Máy đánh bọt (200 000)',
+          approvedBy: 'Quản lý Mộc Giang',
           status: 'Đã đồng bộ Sheet'
         },
         {
           date: '18/11',
           fullDate: '18/11/2026',
-          amount: 4.00,
-          vndAmount: 4000000,
+          amount: 0.595,
+          vndAmount: 595000,
           code: 'CPCĐ-1118',
-          categoryId: 'pos_internet',
-          categoryName: 'Phần mềm POS, Internet & Bản quyền',
-          description: 'Phí duy trì hệ thống đặt bàn Web & tổng đài CSKH 096 3689077',
-          approvedBy: 'Nguyễn Thu Hà',
+          categoryId: 'depreciation',
+          categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ',
+          description: 'Bình lắc pha chế 3 cái (135 000) + Bình đựng trà 1L 4 cái (200 000) + Bình đựng trà 2.1L 4 cái (260 000)',
+          approvedBy: 'Quản lý Mộc Giang',
+          status: 'Đã đồng bộ Sheet'
+        },
+        {
+          date: '19/11',
+          fullDate: '19/11/2026',
+          amount: 0.160,
+          vndAmount: 160000,
+          code: 'CPCĐ-1119',
+          categoryId: 'depreciation',
+          categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ',
+          description: 'Bình đựng đường & sữa đặc 2 cái (160 000)',
+          approvedBy: 'Quản lý Mộc Giang',
           status: 'Đã đồng bộ Sheet'
         },
         {
           date: '20/11',
           fullDate: '20/11/2026',
-          amount: 6.50,
-          vndAmount: 6500000,
+          amount: 0.204,
+          vndAmount: 204000,
           code: 'CPCĐ-1120',
           categoryId: 'depreciation',
           categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ',
-          description: 'Trích khấu hao tài sản cố định & điều hòa trung tâm tháng 11/2026',
-          approvedBy: 'Trần Quốc Tuấn',
+          description: 'Xúc đá (45 000) + Vét (50 000) + Vá (50 000) + Thìa bar (35 000) + Thìa định lượng (24 000)',
+          approvedBy: 'Quản lý Mộc Giang',
           status: 'Đã đồng bộ Sheet'
         },
         {
-          date: '23/11',
-          fullDate: '23/11/2026',
-          amount: 2.88,
-          vndAmount: 2880000,
-          code: 'CPCĐ-1123',
+          date: '21/11',
+          fullDate: '21/11/2026',
+          amount: 0.080,
+          vndAmount: 80000,
+          code: 'CPCĐ-1121',
           categoryId: 'insurance_security',
           categoryName: 'Bảo hiểm, An ninh & Vệ sinh cố định',
-          description: 'Bảo hiểm cháy nổ định kỳ & kiểm định an toàn thực phẩm cơ sở',
-          approvedBy: 'Quản trị Mộc Giang',
+          description: 'Giấy chống tràn & vật tư vệ sinh quầy bar cố định (80 000)',
+          approvedBy: 'Quản lý Mộc Giang',
           status: 'Đã đồng bộ Sheet'
         }
       ]
@@ -421,241 +373,128 @@
     variableWeeks: {
       week_17_23: {
         id: 'week_17_23',
-        label: 'Tuần 17/11 – 23/11',
-        fullLabel: 'Tuần 48 (17/11 – 23/11/2026)',
+        label: 'Tuần 17/11 – 23/11/2026',
+        fullLabel: 'Tuần 17/11 – 23/11/2026',
         xAxisTitle: 'Trục X: Ngày (17/11 – 23/11/2026)',
-        yMax: 20,
-        yStep: 5,
+        yMax: 3,
+        yStep: 0.5,
         days: [
           {
             date: '17/11',
             fullDate: '17/11/2026',
             dayLabel: 'Thứ 3',
             code: 'CPBĐ-1117',
-            doUong: 5.8,
-            suatCom: 9.8,
-            banhBao: 3.9,
-            note: 'Nhập nguyên liệu suất cơm trưa văn phòng, cốt trà thảo mộc & mẻ bánh bao sáng',
-            supplier: 'HTX Rau sạch & Thực phẩm Mộc'
+            doUong: 2.310,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 17/11: Trà sen vàng 250k, Cốm dẻo 260k, Nhài sữa 240k, Thanh nhài 220k, Trà dâu/me/vải/dưa lưới/khế quýt, Cafe sữa 180k, Bạc xỉu 110k (2 310 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '18/11',
             fullDate: '18/11/2026',
             dayLabel: 'Thứ 4',
             code: 'CPBĐ-1118',
-            doUong: 6.1,
-            suatCom: 10.6,
-            banhBao: 4.1,
-            note: 'Nguyên liệu suất cơm đoàn 25 khách, nước mơ/sấu tươi & bánh bao nhân thịt',
-            supplier: 'NCC Thực phẩm An Việt'
+            doUong: 1.419,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 18/11: Cacao latte 200k, Thanh nhài 264k, Nhài sữa 120k, Trà dâu 400k, Trà sen vàng 125k, Cốm dẻo 130k, Cafe sữa 180k (1 419 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '19/11',
             fullDate: '19/11/2026',
             dayLabel: 'Thứ 5',
             code: 'CPBĐ-1119',
-            doUong: 5.9,
-            suatCom: 10.4,
-            banhBao: 4.0,
-            note: 'Thực phẩm tươi cho suất cơm niêu, trà hoa cúc mật ong & bột bánh bao',
-            supplier: 'Trang trại Gà sạch Hòa Bình'
+            doUong: 1.019,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k, Bạc xỉu 154k, Cafe muối 110k, Cốm 260k, Nhài sữa 120k (1 019 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '20/11',
             fullDate: '20/11/2026',
             dayLabel: 'Thứ 6',
             code: 'CPBĐ-1120',
-            doUong: 7.8,
-            suatCom: 15.6,
-            banhBao: 5.4,
-            note: 'Cao điểm lễ 20/11: tăng gấp rưỡi suất cơm đặt tiệc, đồ uống đóng chai & bánh bao',
-            supplier: 'Tổng hợp NCC Thực phẩm & Đồ uống'
+            doUong: 0.575,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k, Cốm 130k, Trà dâu 100k, Thanh nhài 110k, Khế quýt 110k (575 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '21/11',
             fullDate: '21/11/2026',
             dayLabel: 'Thứ 7',
             code: 'CPBĐ-1121',
-            doUong: 7.2,
-            suatCom: 14.1,
-            banhBao: 5.1,
-            note: 'Thứ Bảy đông khách gia đình: nguyên liệu suất cơm mâm, trà sâm dứa & bánh bao trứng cút',
-            supplier: 'NCC Nông sản sạch Hà Nội'
+            doUong: 0.435,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k, Cafe muối 110k, Me Đác 110k, Trà Vải 105k (435 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '22/11',
             fullDate: '22/11/2026',
             dayLabel: 'CN',
             code: 'CPBĐ-1122',
-            doUong: 6.7,
-            suatCom: 13.0,
-            banhBao: 4.7,
-            note: 'Chủ nhật: nguyên liệu suất cơm gia đình, nước thảo mộc & bánh bao nóng mang về',
-            supplier: 'HTX Rau sạch & Đồ uống Mộc'
+            doUong: 0.440,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 22/11: Trà sen 220k, Cốm 220k, Thanh nhài 110k — Tổng phiếu 440 000 VNĐ',
+            supplier: 'Quầy Nước Mộc Giang'
           },
           {
             date: '23/11',
             fullDate: '23/11/2026',
             dayLabel: 'Thứ 2',
             code: 'CPBĐ-1123',
-            doUong: 5.6,
-            suatCom: 10.2,
-            banhBao: 4.2,
-            note: 'Hôm nay (23/11): nhập thịt cá tươi cho suất cơm đầu tuần, trà sen & bánh bao',
-            supplier: 'HTX Rau sạch & Thực phẩm Mộc'
+            doUong: 0.566,
+            suatCom: 0,
+            banhBao: 0,
+            note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k, Trà sữa cốm 130k, Nhài sữa kem trứng 120k, Cafe muối 220k (566 000 VNĐ)',
+            supplier: 'Quầy Nước Mộc Giang'
           }
         ]
       },
-      week_10_16: {
-        id: 'week_10_16',
-        label: 'Tuần 10/11 – 16/11',
-        fullLabel: 'Tuần 47 (10/11 – 16/11/2026)',
-        xAxisTitle: 'Trục X: Ngày (10/11 – 16/11/2026)',
-        yMax: 20,
-        yStep: 5,
+      week_19_25: {
+        id: 'week_19_25',
+        label: 'Tuần 19/11 – 25/11/2026',
+        fullLabel: 'Tuần 19/11 – 25/11/2026',
+        xAxisTitle: 'Trục X: Ngày (19/11 – 25/11/2026)',
+        yMax: 2,
+        yStep: 0.5,
         days: [
-          { date: '10/11', fullDate: '10/11/2026', dayLabel: 'Thứ 3', code: 'CPBĐ-1110', doUong: 5.2, suatCom: 9.4, banhBao: 3.6, note: 'Nhập gạo tám Hải Hậu, thịt heo sinh học cho suất cơm, cốt trà & bột bánh bao', supplier: 'NCC Thực phẩm An Việt' },
-          { date: '11/11', fullDate: '11/11/2026', dayLabel: 'Thứ 4', code: 'CPBĐ-1111', doUong: 6.8, suatCom: 11.2, banhBao: 4.4, note: 'Đơn combo Suất cơm + Đồ uống + Bánh bao tăng mạnh dịp khuyến mãi 11/11', supplier: 'HTX Rau sạch & Thực phẩm Mộc' },
-          { date: '12/11', fullDate: '12/11/2026', dayLabel: 'Thứ 5', code: 'CPBĐ-1112', doUong: 5.4, suatCom: 9.6, banhBao: 3.7, note: 'Nguyên liệu suất cơm cá kho tộ, cam sành pha chế & nhân bánh bao', supplier: 'NCC Nông sản sạch Hà Nội' },
-          { date: '13/11', fullDate: '13/11/2026', dayLabel: 'Thứ 6', code: 'CPBĐ-1113', doUong: 6.3, suatCom: 11.8, banhBao: 4.3, note: 'Suất cơm liên hoan văn phòng tối Thứ 6, trà thảo mộc & bánh bao hấp', supplier: 'Trang trại Gà sạch Hòa Bình' },
-          { date: '14/11', fullDate: '14/11/2026', dayLabel: 'Thứ 7', code: 'CPBĐ-1114', doUong: 7.0, suatCom: 13.5, banhBao: 4.8, note: 'Cuối tuần: thực phẩm suất cơm gia đình, đồ uống thảo mộc & bánh bao', supplier: 'NCC Thực phẩm & Đồ uống Mộc' },
-          { date: '15/11', fullDate: '15/11/2026', dayLabel: 'CN', code: 'CPBĐ-1115', doUong: 6.5, suatCom: 12.6, banhBao: 4.5, note: 'Chủ nhật: nguyên liệu suất cơm niêu, nước mơ ngâm & bánh bao nhân thịt', supplier: 'HTX Rau sạch & Thực phẩm Mộc' },
-          { date: '16/11', fullDate: '16/11/2026', dayLabel: 'Thứ 2', code: 'CPBĐ-1116', doUong: 5.1, suatCom: 9.1, banhBao: 3.5, note: 'Nhập nguyên liệu suất cơm đầu tuần, trà lá nếp & bánh bao điểm tâm', supplier: 'Chợ đầu mối & Làng nghề' }
-        ]
-      },
-      week_03_09: {
-        id: 'week_03_09',
-        label: 'Tuần 03/11 – 09/11',
-        fullLabel: 'Tuần 46 (03/11 – 09/11/2026)',
-        xAxisTitle: 'Trục X: Ngày (03/11 – 09/11/2026)',
-        yMax: 20,
-        yStep: 5,
-        days: [
-          { date: '03/11', fullDate: '03/11/2026', dayLabel: 'Thứ 3', code: 'CPBĐ-1103', doUong: 5.0, suatCom: 9.0, banhBao: 3.5, note: 'Nguyên liệu suất cơm văn phòng Hoàng Cầu, trà sâm dứa & bánh bao sáng', supplier: 'NCC Thực phẩm An Việt' },
-          { date: '04/11', fullDate: '04/11/2026', dayLabel: 'Thứ 4', code: 'CPBĐ-1104', doUong: 5.3, suatCom: 9.5, banhBao: 3.7, note: 'Nhập sườn non, gà ta cho suất cơm trưa, cam tươi & bột mì làm bánh bao', supplier: 'Trang trại Gà sạch Hòa Bình' },
-          { date: '05/11', fullDate: '05/11/2026', dayLabel: 'Thứ 5', code: 'CPBĐ-1105', doUong: 5.1, suatCom: 9.2, banhBao: 3.6, note: 'Thực phẩm suất cơm nhà, trái cây pha chế đồ uống & bánh bao', supplier: 'NCC Nông sản sạch Hà Nội' },
-          { date: '06/11', fullDate: '06/11/2026', dayLabel: 'Thứ 6', code: 'CPBĐ-1106', doUong: 6.2, suatCom: 11.4, banhBao: 4.2, note: 'Tăng cường suất cơm thứ Sáu, cốt trà thảo mộc & bánh bao', supplier: 'HTX Rau sạch & Thực phẩm Mộc' },
-          { date: '07/11', fullDate: '07/11/2026', dayLabel: 'Thứ 7', code: 'CPBĐ-1107', doUong: 6.7, suatCom: 12.9, banhBao: 4.6, note: 'Cao điểm thứ Bảy: suất cơm gia đình, đồ uống thảo mộc & bánh bao', supplier: 'NCC Thực phẩm & Thủy sản tươi' },
-          { date: '08/11', fullDate: '08/11/2026', dayLabel: 'CN', code: 'CPBĐ-1108', doUong: 6.4, suatCom: 12.3, banhBao: 4.4, note: 'Chủ nhật: nguyên liệu suất cơm mâm, nước sấu/mơ & bánh bao', supplier: 'HTX Rau sạch & Đồ uống Mộc' },
-          { date: '09/11', fullDate: '09/11/2026', dayLabel: 'Thứ 2', code: 'CPBĐ-1109', doUong: 4.9, suatCom: 8.8, banhBao: 3.4, note: 'Đầu tuần: nhập gạo ST25/Hải Hậu cho suất cơm, trà sen & bánh bao', supplier: 'Đại lý Gạo & Trà Việt' }
+          { date: '19/11', fullDate: '19/11/2026', dayLabel: 'Thứ 5', code: 'CPBĐ-1119', doUong: 1.019, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k, Bạc xỉu 154k, Cafe muối 110k, Cốm 260k, Nhài sữa 120k (1 019 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '20/11', fullDate: '20/11/2026', dayLabel: 'Thứ 6', code: 'CPBĐ-1120', doUong: 0.575, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k, Cốm 130k, Trà dâu 100k, Thanh nhài 110k, Khế quýt 110k (575 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '21/11', fullDate: '21/11/2026', dayLabel: 'Thứ 7', code: 'CPBĐ-1121', doUong: 0.435, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k, Cafe muối 110k, Me Đác 110k, Trà Vải 105k (435 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '22/11', fullDate: '22/11/2026', dayLabel: 'CN', code: 'CPBĐ-1122', doUong: 0.440, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 22/11: Trà sen 220k, Cốm 220k, Thanh nhài 110k (440 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '23/11', fullDate: '23/11/2026', dayLabel: 'Thứ 2', code: 'CPBĐ-1123', doUong: 0.566, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k, Trà sữa cốm 130k, Nhài sữa kem trứng 120k, Cafe muối 220k (566 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '24/11', fullDate: '24/11/2026', dayLabel: 'Thứ 3', code: 'CPBĐ-1124', doUong: 0.430, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 24/11: Cafe sữa 90k, Trà sữa cốm 130k, Trà dưa lưới 100k, Trà Khế quýt 110k (430 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' },
+          { date: '25/11', fullDate: '25/11/2026', dayLabel: 'Thứ 4', code: 'CPBĐ-1125', doUong: 0.605, suatCom: 0, banhBao: 0, note: 'Nguyên liệu Ngày 25/11: Cafe muối 220k, Trà sữa cốm 260k, Trà sen vàng 125k (605 000 VNĐ)', supplier: 'Quầy Nước Mộc Giang' }
         ]
       }
     },
 
-    // Default Google Form / Sheet Receipt Submissions (with formatted VNĐ like "10 200 000", "1 000 000", "20 000")
+    // Real Google Sheet Receipt Submissions (16 real entries from Mộc Giang Nước cost sheet)
     defaultSubmissions: [
-      {
-        id: 'GF-101',
-        timestamp: '23/11/2026 08:15:22',
-        fullName: 'Nguyễn Thu Hà',
-        date: '23/11',
-        fullDate: '23/11/2026',
-        rawVndInput: '10 200 000',
-        vndAmount: 10200000,
-        trieuAmount: 10.2,
-        expenseType: 'Chi phí biến động',
-        categoryKey: 'suatCom',
-        categoryName: 'Suất cơm',
-        note: 'Nhập thịt tươi, cá chép giòn, gạo tám Hải Hậu & rau theo mùa cho suất cơm ngày 23/11'
-      },
-      {
-        id: 'GF-102',
-        timestamp: '23/11/2026 08:40:10',
-        fullName: 'Trần Quốc Tuấn',
-        date: '23/11',
-        fullDate: '23/11/2026',
-        rawVndInput: '5 600 000',
-        vndAmount: 5600000,
-        trieuAmount: 5.6,
-        expenseType: 'Chi phí biến động',
-        categoryKey: 'doUong',
-        categoryName: 'Đồ uống',
-        note: 'Nhập cốt trà thảo mộc, nước mơ, sấu ngâm & cam tươi quầy bar ngày 23/11'
-      },
-      {
-        id: 'GF-103',
-        timestamp: '23/11/2026 09:05:44',
-        fullName: 'Lê Minh Hương',
-        date: '23/11',
-        fullDate: '23/11/2026',
-        rawVndInput: '4 200 000',
-        vndAmount: 4200000,
-        trieuAmount: 4.2,
-        expenseType: 'Chi phí biến động',
-        categoryKey: 'banhBao',
-        categoryName: 'Bánh bao',
-        note: 'Nguyên liệu bột mì, nhân thịt trứng cút & nấm hương làm bánh bao ngày 23/11'
-      },
-      {
-        id: 'GF-104',
-        timestamp: '23/11/2026 10:12:05',
-        fullName: 'Quản trị Mộc Giang',
-        date: '23/11',
-        fullDate: '23/11/2026',
-        rawVndInput: '2 880 000',
-        vndAmount: 2880000,
-        trieuAmount: 2.88,
-        expenseType: 'Chi phí cố định',
-        categoryKey: 'insurance_security',
-        categoryName: 'Bảo hiểm, An ninh & Vệ sinh cố định',
-        note: 'Bảo hiểm cháy nổ định kỳ & kiểm định an toàn thực phẩm cơ sở 199 Hoàng Cầu'
-      },
-      {
-        id: 'GF-105',
-        timestamp: '22/11/2026 08:20:00',
-        fullName: 'Nguyễn Thu Hà',
-        date: '22/11',
-        fullDate: '22/11/2026',
-        rawVndInput: '13 000 000',
-        vndAmount: 13000000,
-        trieuAmount: 13.0,
-        expenseType: 'Chi phí biến động',
-        categoryKey: 'suatCom',
-        categoryName: 'Suất cơm',
-        note: 'Thực phẩm tươi sống phục vụ suất cơm gia đình Chủ Nhật 22/11'
-      },
-      {
-        id: 'GF-106',
-        timestamp: '20/11/2026 09:30:18',
-        fullName: 'Trần Quốc Tuấn',
-        date: '20/11',
-        fullDate: '20/11/2026',
-        rawVndInput: '6 500 000',
-        vndAmount: 6500000,
-        trieuAmount: 6.5,
-        expenseType: 'Chi phí cố định',
-        categoryKey: 'depreciation',
-        categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ',
-        note: 'Trích khấu hao tài sản cố định & bảo dưỡng điều hòa trung tâm tháng 11/2026'
-      },
-      {
-        id: 'GF-107',
-        timestamp: '15/11/2026 14:00:00',
-        fullName: 'Quản trị Mộc Giang',
-        date: '15/11',
-        fullDate: '15/11/2026',
-        rawVndInput: '20 440 000',
-        vndAmount: 20440000,
-        trieuAmount: 20.44,
-        expenseType: 'Chi phí cố định',
-        categoryKey: 'salary_fixed',
-        categoryName: 'Lương nhân sự cố định (Bếp & Quản lý)',
-        note: 'Quyết toán lương cố định đợt 2 & phụ cấp trách nhiệm nhân sự biên chế'
-      },
-      {
-        id: 'GF-108',
-        timestamp: '01/11/2026 09:00:00',
-        fullName: 'Quản trị Mộc Giang',
-        date: '01/11',
-        fullDate: '01/11/2026',
-        rawVndInput: '49 560 000',
-        vndAmount: 49560000,
-        trieuAmount: 49.56,
-        expenseType: 'Chi phí cố định',
-        categoryKey: 'rent',
-        categoryName: 'Thuê mặt bằng (199 Hoàng Cầu)',
-        note: 'Thanh toán tiền thuê mặt bằng tháng 11/2026 (Tầng 1–3 tại 199 Hoàng Cầu)'
-      }
+      { id: 'GF-01', timestamp: '17/11/2026 08:00:00', fullName: 'Quản lý Mộc Giang', date: '17/11', fullDate: '17/11/2026', rawVndInput: '126 000', vndAmount: 126000, trieuAmount: 0.126, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Thảm bar (80k) + Ca đong 100ml & 250ml (46k) theo Báo giá dụng cụ pha chế' },
+      { id: 'GF-02', timestamp: '17/11/2026 08:15:00', fullName: 'Quản lý Mộc Giang', date: '17/11', fullDate: '17/11/2026', rawVndInput: '200 000', vndAmount: 200000, trieuAmount: 0.200, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Máy đánh bọt pha Cacao Latte & Kem trứng (Báo giá dụng cụ pha chế)' },
+      { id: 'GF-03', timestamp: '18/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '18/11', fullDate: '18/11/2026', rawVndInput: '135 000', vndAmount: 135000, trieuAmount: 0.135, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình lắc pha chế (3 cái x 45k) theo Báo giá dụng cụ pha chế' },
+      { id: 'GF-04', timestamp: '18/11/2026 09:00:00', fullName: 'Quản lý Mộc Giang', date: '18/11', fullDate: '18/11/2026', rawVndInput: '460 000', vndAmount: 460000, trieuAmount: 0.460, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình đựng trà 1L (4 cái = 200k) + Bình 2.1L (4 cái = 260k)' },
+      { id: 'GF-05', timestamp: '19/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '19/11', fullDate: '19/11/2026', rawVndInput: '160 000', vndAmount: 160000, trieuAmount: 0.160, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình đựng đường & sữa đặc (2 cái x 80k) theo Báo giá dụng cụ pha chế' },
+      { id: 'GF-06', timestamp: '20/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '20/11', fullDate: '20/11/2026', rawVndInput: '204 000', vndAmount: 204000, trieuAmount: 0.204, expenseType: 'Chi phí cố định', categoryKey: 'depreciation', categoryName: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Xúc đá (45k) + Vét (50k) + Vá (50k) + Thìa bar (35k) + Thìa định lượng (24k)' },
+      { id: 'GF-07', timestamp: '21/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '21/11', fullDate: '21/11/2026', rawVndInput: '80 000', vndAmount: 80000, trieuAmount: 0.080, expenseType: 'Chi phí cố định', categoryKey: 'insurance_security', categoryName: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Giấy chống tràn & vật tư vệ sinh quầy bar cố định (80k)' },
+      { id: 'GF-08', timestamp: '17/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '17/11', fullDate: '17/11/2026', rawVndInput: '2 310 000', vndAmount: 2310000, trieuAmount: 2.310, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 17/11: Trà sen vàng 250k + Cốm dẻo 260k + Nhài sữa 240k + Thanh nhài 220k + Trà dâu/me/vải/dưa lưới/khế quýt + Cafe/Bạc xỉu' },
+      { id: 'GF-09', timestamp: '18/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '18/11', fullDate: '18/11/2026', rawVndInput: '1 419 000', vndAmount: 1419000, trieuAmount: 1.419, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 18/11: Cacao latte 200k + Thanh nhài 264k + Nhài sữa 120k + Trà dâu 400k + Trà sen 125k + Cốm dẻo 130k + Cafe sữa 180k' },
+      { id: 'GF-10', timestamp: '19/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '19/11', fullDate: '19/11/2026', rawVndInput: '1 019 000', vndAmount: 1019000, trieuAmount: 1.019, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k + Bạc xỉu 154k + Cafe muối 110k + Cốm 260k + Nhài sữa 120k' },
+      { id: 'GF-11', timestamp: '20/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '20/11', fullDate: '20/11/2026', rawVndInput: '575 000', vndAmount: 575000, trieuAmount: 0.575, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k + Cốm 130k + Trà dâu 100k + Thanh nhài 110k + Khế quýt 110k' },
+      { id: 'GF-12', timestamp: '21/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '21/11', fullDate: '21/11/2026', rawVndInput: '435 000', vndAmount: 435000, trieuAmount: 0.435, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k + Cafe muối 110k + Me Đác 110k + Trà Vải 105k' },
+      { id: 'GF-13', timestamp: '22/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '22/11', fullDate: '22/11/2026', rawVndInput: '440 000', vndAmount: 440000, trieuAmount: 0.440, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 22/11: Trà sen 220k + Cốm 220k + Thanh nhài 110k (Tổng phiếu 440.000 đ)' },
+      { id: 'GF-14', timestamp: '23/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '23/11', fullDate: '23/11/2026', rawVndInput: '566 000', vndAmount: 566000, trieuAmount: 0.566, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k + Trà sữa cốm 130k + Nhài sữa kem trứng 120k + Cafe muối 220k' },
+      { id: 'GF-15', timestamp: '24/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '24/11', fullDate: '24/11/2026', rawVndInput: '430 000', vndAmount: 430000, trieuAmount: 0.430, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 24/11: Cafe sữa 90k + Trà sữa cốm 130k + Trà dưa lưới 100k + Trà Khế quýt 110k' },
+      { id: 'GF-16', timestamp: '25/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '25/11', fullDate: '25/11/2026', rawVndInput: '605 000', vndAmount: 605000, trieuAmount: 0.605, expenseType: 'Chi phí biến động', categoryKey: 'doUong', categoryName: 'Đồ uống', note: 'Nguyên liệu Ngày 25/11: Cafe muối 220k + Trà sữa cốm 260k + Trà sen vàng 125k' }
     ]
   };
 
@@ -2233,8 +2072,8 @@
     const plotWidth = svgWidth - padLeft - padRight;
     const plotHeight = svgHeight - padTop - padBottom;
 
-    const maxVal = Math.max(...items.map((d) => Number(d.amount) || 0), 1);
-    const yMax = yMaxForced && maxVal <= yMaxForced ? yMaxForced : Math.ceil((maxVal * 1.15) / yStep) * yStep;
+    const maxVal = Math.max(...items.map((d) => Number(d.amount) || 0), 0.1);
+    const yMax = yMaxForced && maxVal <= yMaxForced ? yMaxForced : Math.round(Math.ceil((maxVal * 1.15) / yStep) * yStep * 100) / 100;
     const numSteps = Math.max(4, Math.round(yMax / yStep));
 
     let gridLinesHtml = '';
@@ -2373,7 +2212,7 @@
                 text-anchor="end"
                 fill="#6E5A49"
                 font-size="11.5"
-                font-weight="600">${val} tr</text>
+                font-weight="600">${formatMillionCompact(val)} tr</text>
         </g>
       `;
     }
@@ -2502,41 +2341,44 @@
     const cx = 120;
     const cy = 120;
     const r = 106;
-    const totalPct = categories.reduce((acc, c) => acc + (Number(c.percent) || 0), 0) || 100;
+    const nonZeroCats = categories.filter((c) => (Number(c.percent) || 0) > 0);
+    const totalPct = nonZeroCats.reduce((acc, c) => acc + (Number(c.percent) || 0), 0) || 100;
 
     let currentAngle = 0;
     let slicesHtml = '';
 
     categories.forEach((cat, idx) => {
       const pct = Number(cat.percent) || 0;
-      const sliceAngle = Math.max(0.5, (pct / totalPct) * 360);
+      if (pct <= 0) return; // Skip drawing 0% slices on SVG pie; still shown in legend below
+
+      const sliceAngle = (pct / totalPct) * 360;
       const startAngle = currentAngle;
       const endAngle = currentAngle + sliceAngle;
       const midAngle = startAngle + sliceAngle / 2;
       currentAngle = endAngle;
 
-      const pathData = createPieSlicePath(cx, cy, r, startAngle, endAngle);
-      const labelRadius = pct < 10 ? r * 0.72 : r * 0.6;
-      const labelPos = polarToCartesian(cx, cy, labelRadius, midAngle);
+      const isFullCircle = sliceAngle >= 359.8 || nonZeroCats.length === 1;
+      const labelRadius = isFullCircle ? 0 : pct < 10 ? r * 0.75 : r * 0.6;
+      const labelPos = isFullCircle ? { x: cx, y: cy } : polarToCartesian(cx, cy, labelRadius, midAngle);
       const isHighlighted = activeCatId === cat.id;
       const isDimmed = activeCatId && activeCatId !== cat.id;
 
       const pctDisplay = typeof cat.percentDisplay === 'string' ? cat.percentDisplay : `${pct}%`;
+      const shapeHtml = isFullCircle
+        ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${cat.color}" stroke="#FFFFFF" stroke-width="2.4" />`
+        : `<path d="${createPieSlicePath(cx, cy, r, startAngle, endAngle)}" fill="${cat.color}" stroke="#FFFFFF" stroke-width="2.4" />`;
 
       slicesHtml += `
         <g class="mg-exp-pie-slice ${isHighlighted ? 'is-active' : ''} ${isDimmed ? 'is-dimmed' : ''}"
            data-pie-cat="${cat.id}"
            data-pie-idx="${idx}"
            data-chart-type="${chartType}">
-          <path d="${pathData}"
-                fill="${cat.color}"
-                stroke="#FFFFFF"
-                stroke-width="2.4" />
+          ${shapeHtml}
           <text x="${labelPos.x.toFixed(1)}"
                 y="${(showLabelNameOnSlice ? labelPos.y - 2 : labelPos.y + 4).toFixed(1)}"
                 text-anchor="middle"
                 fill="#FFFFFF"
-                font-size="${pct < 9 ? '11' : '12.5'}"
+                font-size="${isFullCircle ? '16' : pct < 9 ? '11' : '12.5'}"
                 font-weight="800"
                 style="text-shadow: 0 1px 3px rgba(0,0,0,0.45); pointer-events: none;">
             ${pctDisplay}
@@ -2544,10 +2386,10 @@
           ${
             showLabelNameOnSlice
               ? `<text x="${labelPos.x.toFixed(1)}"
-                       y="${(labelPos.y + 13).toFixed(1)}"
+                       y="${(labelPos.y + (isFullCircle ? 16 : 13)).toFixed(1)}"
                        text-anchor="middle"
                        fill="#FFFFFF"
-                       font-size="10.5"
+                       font-size="${isFullCircle ? '12.5' : '10.5'}"
                        font-weight="700"
                        style="text-shadow: 0 1px 3px rgba(0,0,0,0.45); pointer-events: none;">
                    ${cat.shortName || cat.name}
@@ -3241,14 +3083,15 @@
     const periodTotal = recordsForChart.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
     const totalMonth = fixed.totalMonth !== undefined ? Number(fixed.totalMonth) : periodTotal;
     const totalMonthVnd = formatVndSpace(Math.round(totalMonth * 1000000));
-    const avgPerDay = totalMonth / Math.max(fixed.daysInMonth || 30, 1);
+    const avgPerDay = totalMonth / Math.max(recordsForChart.length || 1, 1);
     const largestCat =
       fixed.categories.slice().sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))[0] ||
       fixed.categories[0];
     const peakRecord =
       recordsForChart.slice().sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))[0] || null;
-    const maxFixedBarVal = peakRecord ? Number(peakRecord.amount) || 1 : 10;
-    const fixedYStep = maxFixedBarVal <= 5 ? 1 : maxFixedBarVal <= 15 ? 2 : maxFixedBarVal <= 30 ? 5 : 10;
+    const maxFixedBarVal = peakRecord ? Number(peakRecord.amount) || 0.5 : 1;
+    const fixedYStep =
+      maxFixedBarVal <= 0.8 ? 0.2 : maxFixedBarVal <= 2.5 ? 0.5 : maxFixedBarVal <= 5 ? 1 : maxFixedBarVal <= 15 ? 2 : maxFixedBarVal <= 30 ? 5 : 10;
     const revenueRatio = data.monthlyRevenue > 0 ? ((totalMonth / data.monthlyRevenue) * 100).toFixed(1) : '0.0';
 
     const catColorMap = {};
@@ -4010,9 +3853,22 @@
                     ? `<tr><td colspan="8" style="text-align:center; padding: 24px; color:#695342;">Không tìm thấy ngày phù hợp trong tuần này.</td></tr>`
                     : tableRecords
                         .map((rec) => {
-                          const dayTotal = (Number(rec.suatCom) || 0) + (Number(rec.doUong) || 0) + (Number(rec.banhBao) || 0);
+                          const doUongVal = Number(rec.doUong) || 0;
+                          const suatComVal = Number(rec.suatCom) || 0;
+                          const banhBaoVal = Number(rec.banhBao) || 0;
+                          const dayTotal = suatComVal + doUongVal + banhBaoVal;
                           const dayTotalVnd = formatVndSpace(Math.round(dayTotal * 1000000));
-                          const domPct = dayTotal > 0 ? ((rec.suatCom / dayTotal) * 100).toFixed(1).replace('.', ',') : '51,0';
+                          let domName = 'Đồ uống';
+                          let domVal = doUongVal;
+                          if (suatComVal > domVal) {
+                            domName = 'Suất cơm';
+                            domVal = suatComVal;
+                          }
+                          if (banhBaoVal > domVal) {
+                            domName = 'Bánh bao';
+                            domVal = banhBaoVal;
+                          }
+                          const domPct = dayTotal > 0 ? ((domVal / dayTotal) * 100).toFixed(1).replace('.', ',') : '0,0';
                           return `
                             <tr>
                               <td><strong>${rec.dayLabel ? rec.dayLabel + ', ' : ''}${rec.fullDate}</strong></td>
@@ -4038,7 +3894,7 @@
                                 <div style="font-size: 11px; color: #695342; font-weight: 600;">${dayTotalVnd} VNĐ</div>
                               </td>
                               <td>
-                                <span class="mg-exp-status-pill">Suất cơm (${domPct}%)</span>
+                                <span class="mg-exp-status-pill">${domName} (${domPct}%)</span>
                               </td>
                             </tr>
                           `;
