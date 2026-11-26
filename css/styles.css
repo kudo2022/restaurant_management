@@ -1085,6 +1085,19 @@ body.dark-theme .form-input {
   margin-bottom: 20px;
 }
 
+/* 3-Column Balanced KPI Grid for Overview (Doanh thu · Chi phí · Lợi nhuận) */
+.kpi-grid-3,
+.overview-kpi-grid,
+.mg-ov-kpi-grid,
+#view-overview .kpi-grid,
+#view-overview .mg-kpi-grid,
+#view-overview .mg-ov-kpi-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
 .kpi-card,
 .mg-kpi-card {
   background: var(--mg-surface);
@@ -2008,7 +2021,13 @@ body.dark-theme .exp-type-radio-card.active {
   .mg-form-row,
   .exp-form-row,
   .mg-radio-cards,
-  .exp-type-radio-group {
-    grid-template-columns: 1fr;
+  .exp-type-radio-group,
+  .kpi-grid-3,
+  .overview-kpi-grid,
+  .mg-ov-kpi-grid,
+  #view-overview .kpi-grid,
+  #view-overview .mg-kpi-grid,
+  #view-overview .mg-ov-kpi-grid {
+    grid-template-columns: 1fr !important;
   }
 }

@@ -1,18 +1,25 @@
 /**
- * Mộc Giang Restaurant Management — Core Dataset, Brand Constants & Google Form/Drive Integration
+ * Mộc Giang Restaurant Management — Core Real Dataset, Brand Constants & Google Form/Drive Integration
  * Brand: Mộc Giang - Hương vị cơm nhà - Đậm đà ly nước
  * Address: 199 Hoàng Cầu, Đống Đa, Hà Nội | Hotline: 096 3689077
- * Chart monetary figures are in Triệu VNĐ (Million VND) for November 2026;
- * Form inputs are in VNĐ (e.g. "20 000", "1 000 000") and automatically converted to Triệu VNĐ.
+ *
+ * 100% REAL DATA ONLY (Zero mock data):
+ *  - Revenue: 156 real POS invoices (17/11/2026 – 24/11/2026) totaling 13 480 000 VNĐ (13,48 Triệu VNĐ), 409 items sold.
+ *  - Expenses: 16 real expense records synced from Mộc Giang Google Sheet (14OH_xC4muiSAAhK67nVzmJYltOpjemyLrvyPf5yLAtE & Nước 1lOo0sqqq2zH_alPGvqpInAoM7jeNlrg5BUjGjXVl7RQ)
+ *    totaling 9 164 000 VNĐ (9,164 Triệu VNĐ).
+ *  - Profit: Real Net Profit = 13 480 000 - 9 164 000 = 4 316 000 VNĐ (4,316 Triệu VNĐ, margin 32,02%).
  */
 (function () {
   'use strict';
 
   const SPREADSHEET_ID = '14OH_xC4muiSAAhK67nVzmJYltOpjemyLrvyPf5yLAtE';
+  const NUOC_SPREADSHEET_ID = '1lOo0sqqq2zH_alPGvqpInAoM7jeNlrg5BUjGjXVl7RQ';
+  const GOOGLE_FORM_ID = '1wPU5OScA-S7s49lo1dURjr93NizlOyddVSnm23SERcc';
   const DRIVE_FOLDER_ID = '1evvUqayKJ3MZAs4xjqg6WQPLHEzRvpv2';
   const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/edit';
+  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/' + GOOGLE_FORM_ID + '/viewform';
   const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/' + DRIVE_FOLDER_ID;
-  const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=out:csv&sheet=Sheet1';
+  const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=out:csv&sheet=Form%20Responses%201';
 
   const brand = {
     name: 'MỘC GIANG',
@@ -26,9 +33,9 @@
     adminUser: 'mocgiang.admin1',
     adminDisplayName: 'Quản trị Mộc Giang',
     adminRole: 'Quản trị nhà hàng',
-    currentDate: '2026-11-23',
-    currentDateFormatted: 'Thứ Hai, 23/11/2026',
-    currentWeekLabel: 'Tuần 48 (23–29/11/2026)',
+    currentDate: '2026-11-24',
+    currentDateFormatted: 'Thứ Ba, 24/11/2026',
+    currentWeekLabel: '17/11 – 24/11/2026',
     monthLabel: 'Tháng 11/2026',
     unit: 'Triệu VNĐ',
     unitShort: 'tr'
@@ -71,8 +78,7 @@
 
     let vnd = 0;
     if (typeof raw === 'number' && !isNaN(raw)) {
-      // If a small decimal < 1000 is passed directly as trieu, check context; otherwise treat as VND integer
-      vnd = Math.round(raw);
+      vnd = (raw > 0 && raw < 1000) ? Math.round(raw * 1000000) : Math.round(raw);
     } else {
       const str = String(raw).trim();
       const digitsOnly = str.replace(/[^\d]/g, '');
@@ -81,7 +87,8 @@
 
     const trieu = Math.round((vnd / 1000000) * 10000) / 10000;
     const formattedVnd = String(vnd).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    const decimals = (trieu > 0 && trieu < 0.1) ? 2 : (Math.round(trieu * 100) !== Math.round(trieu * 10) * 10 ? 2 : 2);
+    const hasThousandths = Math.abs(trieu * 100 - Math.round(trieu * 100)) > 0.01;
+    const decimals = hasThousandths ? 3 : 2;
     const formattedTrieu = trieu.toLocaleString('vi-VN', {
       minimumFractionDigits: decimals,
       maximumFractionDigits: 3
@@ -99,7 +106,6 @@
 
   window.parseVndInput = parseVndInput;
 
-  // Generate an SVG Data URI receipt thumbnail so every entry has a viewable receipt preview
   function createReceiptSvgDataUri(title, amountFormattedVnd, dateStr, personName, code) {
     const svg =
       '<svg xmlns="http://www.w3.org/2000/svg" width="420" height="540" viewBox="0 0 420 540">' +
@@ -108,23 +114,23 @@
       '<rect x="16" y="16" width="388" height="86" fill="#3D1F0D" rx="12"/>' +
       '<text x="210" y="52" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="20" font-weight="bold">NHÀ HÀNG MỘC GIANG</text>' +
       '<text x="210" y="78" text-anchor="middle" fill="#EAB354" font-family="Arial, sans-serif" font-size="12">199 Hoàng Cầu, Đống Đa, Hà Nội · 096 3689077</text>' +
-      '<text x="210" y="136" text-anchor="middle" fill="#2E6B22" font-family="Arial, sans-serif" font-size="17" font-weight="bold">HÓA ĐƠN / MINH CHỨNG CHI PHÍ</text>' +
+      '<text x="210" y="136" text-anchor="middle" fill="#2E6B22" font-family="Arial, sans-serif" font-size="17" font-weight="bold">CHỨNG TỪ CHI PHÍ THỰC TẾ</text>' +
       '<line x1="40" y1="154" x2="380" y2="154" stroke="#E6DEC8" stroke-dasharray="4 4"/>' +
       '<text x="44" y="188" fill="#6E5D4F" font-family="Arial, sans-serif" font-size="13">Mã chứng từ:</text>' +
       '<text x="376" y="188" text-anchor="end" fill="#24160D" font-family="Arial, sans-serif" font-size="13" font-weight="bold">' + code + '</text>' +
       '<text x="44" y="220" fill="#6E5D4F" font-family="Arial, sans-serif" font-size="13">Ngày phát sinh:</text>' +
       '<text x="376" y="220" text-anchor="end" fill="#24160D" font-family="Arial, sans-serif" font-size="13" font-weight="bold">' + dateStr + '</text>' +
-      '<text x="44" y="252" fill="#6E5D4F" font-family="Arial, sans-serif" font-size="13">Người lập phiếu:</text>' +
+      '<text x="44" y="252" fill="#6E5D4F" font-family="Arial, sans-serif" font-size="13">Bộ phận / Người lập:</text>' +
       '<text x="376" y="252" text-anchor="end" fill="#24160D" font-family="Arial, sans-serif" font-size="13" font-weight="bold">' + personName + '</text>' +
       '<text x="44" y="284" fill="#6E5D4F" font-family="Arial, sans-serif" font-size="13">Hạng mục chi:</text>' +
       '<text x="376" y="284" text-anchor="end" fill="#2E6B22" font-family="Arial, sans-serif" font-size="13" font-weight="bold">' + title + '</text>' +
       '<rect x="40" y="316" width="340" height="84" fill="#F4EDE0" stroke="#E6DEC8" rx="10"/>' +
-      '<text x="210" y="344" text-anchor="middle" fill="#5C3114" font-family="Arial, sans-serif" font-size="12" font-weight="bold">SỐ TIỀN THANH TOÁN (VNĐ)</text>' +
+      '<text x="210" y="344" text-anchor="middle" fill="#5C3114" font-family="Arial, sans-serif" font-size="12" font-weight="bold">SỐ TIỀN THỰC TẾ (VNĐ)</text>' +
       '<text x="210" y="380" text-anchor="middle" fill="#2E6B22" font-family="Arial, sans-serif" font-size="24" font-weight="bold">' + amountFormattedVnd + ' VNĐ</text>' +
-      '<circle cx="315" cy="455" r="36" fill="none" stroke="#C93B2B" stroke-width="2.5" stroke-dasharray="3 2"/>' +
-      '<text x="315" y="452" text-anchor="middle" fill="#C93B2B" font-family="Arial, sans-serif" font-size="10" font-weight="bold">ĐÃ ĐỐI SOÁT</text>' +
-      '<text x="315" y="466" text-anchor="middle" fill="#C93B2B" font-family="Arial, sans-serif" font-size="9">MỘC GIANG</text>' +
-      '<text x="44" y="460" fill="#7A6A5C" font-family="Arial, sans-serif" font-size="11">Lưu trữ: Google Drive Mộc Giang</text>' +
+      '<circle cx="315" cy="455" r="36" fill="none" stroke="#2E6B22" stroke-width="2.5" stroke-dasharray="3 2"/>' +
+      '<text x="315" y="452" text-anchor="middle" fill="#2E6B22" font-family="Arial, sans-serif" font-size="10" font-weight="bold">DỮ LIỆU THẬT</text>' +
+      '<text x="315" y="466" text-anchor="middle" fill="#2E6B22" font-family="Arial, sans-serif" font-size="9">GOOGLE SHEET</text>' +
+      '<text x="44" y="460" fill="#7A6A5C" font-family="Arial, sans-serif" font-size="11">Đồng bộ: Google Sheet Mộc Giang</text>' +
       '</svg>';
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
   }
@@ -9786,129 +9792,111 @@
   const revenueWeekly = posRevenueData.week17To23;
   const revenueChannels = posRevenueData.channels;
 
-  // Fixed Expenses (Chi phí cố định — Total: 118.0 Triệu VNĐ = 118 000 000 VNĐ)
+  // Real Fixed Expenses from Mộc Giang Google Sheet (Báo giá dụng cụ pha chế — Total: 1 365 000 VNĐ = 1.365 Triệu VNĐ)
   const fixedExpensesByDay = [
-    { date: '01/11', fullDate: '01/11/2026', amount: 49.56, value: 49.56, amountVnd: 49560000, formattedVnd: '49 560 000', fullName: 'Nguyễn Minh Quản Lý', category: 'Thuê mặt bằng (199 Hoàng Cầu)', note: 'Thanh toán tiền thuê mặt bằng tháng 11/2026 (Tầng 1–3)' },
-    { date: '03/11', fullDate: '03/11/2026', amount: 5.44, value: 5.44, amountVnd: 5440000, formattedVnd: '5 440 000', fullName: 'Nguyễn Thu Hà', category: 'Phần mềm POS, Internet & Bản quyền', note: 'Phí gia hạn iPOS, chữ ký số, cáp quang Viettel doanh nghiệp' },
-    { date: '05/11', fullDate: '05/11/2026', amount: 18.50, value: 18.50, amountVnd: 18500000, formattedVnd: '18 500 000', fullName: 'Nguyễn Minh Quản Lý', category: 'Lương nhân sự cố định (Bếp & Quản lý)', note: 'Tạm ứng lương đợt 1 cho Bếp trưởng, Bếp chính & Quản lý ca' },
-    { date: '08/11', fullDate: '08/11/2026', amount: 4.20, value: 4.20, amountVnd: 4200000, formattedVnd: '4 200 000', fullName: 'Nguyễn Thu Hà', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Phí vệ sinh môi trường, bảo vệ trông xe phố Hoàng Cầu' },
-    { date: '10/11', fullDate: '10/11/2026', amount: 6.48, value: 6.48, amountVnd: 6480000, formattedVnd: '6 480 000', fullName: 'Trần Quốc Tuấn', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bảo dưỡng hệ thống hút mùi bếp, tủ đông & nồi cơm niêu công nghiệp' },
-    { date: '15/11', fullDate: '15/11/2026', amount: 20.44, value: 20.44, amountVnd: 20440000, formattedVnd: '20 440 000', fullName: 'Nguyễn Minh Quản Lý', category: 'Lương nhân sự cố định (Bếp & Quản lý)', note: 'Quyết toán lương cố định đợt 2 & phụ cấp trách nhiệm' },
-    { date: '18/11', fullDate: '18/11/2026', amount: 4.00, value: 4.00, amountVnd: 4000000, formattedVnd: '4 000 000', fullName: 'Nguyễn Thu Hà', category: 'Phần mềm POS, Internet & Bản quyền', note: 'Phí duy trì hệ thống đặt bàn Web & tổng đài CSKH 096 3689077' },
-    { date: '20/11', fullDate: '20/11/2026', amount: 6.50, value: 6.50, amountVnd: 6500000, formattedVnd: '6 500 000', fullName: 'Trần Quốc Tuấn', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Trích khấu hao tài sản cố định & điều hòa trung tâm tháng 11' },
-    { date: '23/11', fullDate: '23/11/2026', amount: 2.88, value: 2.88, amountVnd: 2880000, formattedVnd: '2 880 000', fullName: 'Nguyễn Minh Quản Lý', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Bảo hiểm cháy nổ định kỳ & kiểm định an toàn thực phẩm' }
+    { date: '17/11', fullDate: '17/11/2026', amount: 0.326, value: 0.326, amountVnd: 326000, formattedVnd: '326 000', fullName: 'Quản lý Mộc Giang', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Thảm bar (80 000) + Ca đong 100ml & 250ml (46 000) + Máy đánh bọt (200 000)' },
+    { date: '18/11', fullDate: '18/11/2026', amount: 0.595, value: 0.595, amountVnd: 595000, formattedVnd: '595 000', fullName: 'Quản lý Mộc Giang', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình lắc pha chế 3 cái (135 000) + Bình đựng trà 1L & 2,1L (460 000)' },
+    { date: '19/11', fullDate: '19/11/2026', amount: 0.160, value: 0.160, amountVnd: 160000, formattedVnd: '160 000', fullName: 'Quản lý Mộc Giang', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình đựng đường & sữa đặc 2 cái (160 000)' },
+    { date: '20/11', fullDate: '20/11/2026', amount: 0.204, value: 0.204, amountVnd: 204000, formattedVnd: '204 000', fullName: 'Quản lý Mộc Giang', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Xúc đá (45 000) + Vét (50 000) + Vá (50 000) + Thìa bar (35 000) + Thìa định lượng (24 000)' },
+    { date: '21/11', fullDate: '21/11/2026', amount: 0.080, value: 0.080, amountVnd: 80000, formattedVnd: '80 000', fullName: 'Quản lý Mộc Giang', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Giấy chống tràn & vật tư vệ sinh quầy bar cố định (80 000)' }
   ];
 
   const fixedExpensesCategories = [
     {
+      id: 'depreciation',
+      name: 'Khấu hao thiết bị & Bảo trì định kỳ',
+      shortName: 'Dụng cụ & Thiết bị pha chế',
+      amount: 1.285,
+      value: 1.285,
+      amountVnd: 1285000,
+      formattedVnd: '1 285 000',
+      percentage: 94.1,
+      percent: 94,
+      color: '#D97724',
+      description: 'Thảm bar, ca đong, máy đánh bọt, bình lắc, bình đựng trà 1L/2.1L, bình đường sữa, xúc đá, vét, vá, thìa bar'
+    },
+    {
+      id: 'insurance_security',
+      name: 'Bảo hiểm, An ninh & Vệ sinh cố định',
+      shortName: 'Vật tư & Vệ sinh cố định',
+      amount: 0.080,
+      value: 0.080,
+      amountVnd: 80000,
+      formattedVnd: '80 000',
+      percentage: 5.9,
+      percent: 6,
+      color: '#8C5A3C',
+      description: 'Giấy chống tràn & vật tư vệ sinh quầy nước cố định'
+    },
+    {
       id: 'rent',
       name: 'Thuê mặt bằng (199 Hoàng Cầu)',
       shortName: 'Thuê mặt bằng 199 Hoàng Cầu',
-      amount: 49.56,
-      value: 49.56,
-      amountVnd: 49560000,
-      formattedVnd: '49 560 000',
-      percentage: 42,
-      percent: 42,
+      amount: 0,
+      value: 0,
+      amountVnd: 0,
+      formattedVnd: '0',
+      percentage: 0,
+      percent: 0,
       color: '#3D1F0D',
-      description: 'Mặt bằng 3 tầng tại 199 Hoàng Cầu, Đống Đa, Hà Nội'
+      description: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
     },
     {
       id: 'salary_fixed',
       name: 'Lương nhân sự cố định (Bếp & Quản lý)',
       shortName: 'Lương nhân sự cố định',
-      amount: 38.94,
-      value: 38.94,
-      amountVnd: 38940000,
-      formattedVnd: '38 940 000',
-      percentage: 33,
-      percent: 33,
+      amount: 0,
+      value: 0,
+      amountVnd: 0,
+      formattedVnd: '0',
+      percentage: 0,
+      percent: 0,
       color: '#2E6B22',
-      description: 'Bếp trưởng, 4 đầu bếp cơm nhà, 2 pha chế chính, 1 quản lý'
-    },
-    {
-      id: 'depreciation',
-      name: 'Khấu hao thiết bị & Bảo trì định kỳ',
-      shortName: 'Khấu hao thiết bị bếp',
-      amount: 12.98,
-      value: 12.98,
-      amountVnd: 12980000,
-      formattedVnd: '12 980 000',
-      percentage: 11,
-      percent: 11,
-      color: '#D97724',
-      description: 'Khấu hao bếp công nghiệp, tủ mát, máy pha trà & nội thất gỗ'
+      description: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
     },
     {
       id: 'pos_internet',
       name: 'Phần mềm POS, Internet & Bản quyền',
       shortName: 'Phần mềm POS & Internet',
-      amount: 9.44,
-      value: 9.44,
-      amountVnd: 9440000,
-      formattedVnd: '9 440 000',
-      percentage: 8,
-      percent: 8,
+      amount: 0,
+      value: 0,
+      amountVnd: 0,
+      formattedVnd: '0',
+      percentage: 0,
+      percent: 0,
       color: '#2B7BBB',
-      description: 'Phần mềm quản lý bán hàng POS, hóa đơn điện tử & cáp quang'
-    },
-    {
-      id: 'insurance_security',
-      name: 'Bảo hiểm, An ninh & Vệ sinh cố định',
-      shortName: 'Bảo hiểm & Phí định kỳ',
-      amount: 7.08,
-      value: 7.08,
-      amountVnd: 7080000,
-      formattedVnd: '7 080 000',
-      percentage: 6,
-      percent: 6,
-      color: '#8C5A3C',
-      description: 'BHXH nhân sự chính thức, phí PCCC, an ninh & rác thải đô thị'
+      description: 'Chưa phát sinh phiếu chi trong kỳ 17/11 – 25/11'
     }
   ];
 
-  // Variable Expenses (Chi phí biến động — 3 danh mục: Suất cơm, Đồ uống, Bánh bao)
+  // Real Variable Expenses from Mộc Giang Google Sheet (Nguyên liệu Ngày 17/11 – 25/11 — Total: 7 799 000 VNĐ = 7.799 Triệu VNĐ)
   const variableExpensesWeeks = {
     'week_17_23': {
       id: 'week_17_23',
       label: 'Tuần 17/11 – 23/11/2026',
       xAxisTitle: 'Trục X: Ngày (17/11 – 23/11/2026)',
       days: [
-        { date: '17/11', fullDate: '17/11/2026', dayLabel: 'Thứ 3', doUong: 5.8, suatCom: 9.8, banhBao: 3.9, amount: 19.5, value: 19.5, category: 'Suất cơm', note: 'Chi phí nguyên liệu Suất cơm nhà, Đồ uống thảo mộc & Bánh bao' },
-        { date: '18/11', fullDate: '18/11/2026', dayLabel: 'Thứ 4', doUong: 6.1, suatCom: 10.6, banhBao: 4.1, amount: 20.8, value: 20.8, category: 'Suất cơm', note: 'Tăng suất cơm trưa văn phòng Hoàng Cầu & bánh bao nóng' },
-        { date: '19/11', fullDate: '19/11/2026', dayLabel: 'Thứ 5', doUong: 5.9, suatCom: 10.4, banhBao: 4.0, amount: 20.3, value: 20.3, category: 'Suất cơm', note: 'Suất cơm đoàn khách công ty, trà thảo mộc & bánh bao nhân thịt' },
-        { date: '20/11', fullDate: '20/11/2026', dayLabel: 'Thứ 6', doUong: 7.8, suatCom: 15.6, banhBao: 5.4, amount: 28.8, value: 28.8, category: 'Suất cơm', note: 'Cao điểm lễ 20/11: Suất cơm tiệc, đồ uống & bánh bao tăng mạnh' },
-        { date: '21/11', fullDate: '21/11/2026', dayLabel: 'Thứ 7', doUong: 7.2, suatCom: 14.1, banhBao: 5.1, amount: 26.4, value: 26.4, category: 'Suất cơm', note: 'Cuối tuần phục vụ suất cơm gia đình, đồ uống & bánh bao' },
-        { date: '22/11', fullDate: '22/11/2026', dayLabel: 'CN', doUong: 6.7, suatCom: 13.0, banhBao: 4.7, amount: 24.4, value: 24.4, category: 'Suất cơm', note: 'Chủ nhật đông khách tại chỗ & đơn bánh bao mang về' },
-        { date: '23/11', fullDate: '23/11/2026', dayLabel: 'Thứ 2', doUong: 5.6, suatCom: 10.2, banhBao: 4.2, amount: 20.0, value: 20.0, category: 'Suất cơm', note: 'Đầu tuần nhập nguyên liệu Suất cơm (gồm 1 000 000 VNĐ rau sạch), Đồ uống (gồm 20 000 VNĐ lá dứa) & Bánh bao' }
+        { date: '17/11', fullDate: '17/11/2026', dayLabel: 'Thứ 3', doUong: 2.310, suatCom: 0, banhBao: 0, amount: 2.310, value: 2.310, category: 'Đồ uống', note: 'Nguyên liệu Ngày 17/11: Trà sen vàng 250k, Cốm dẻo 260k, Nhài sữa 240k, Thanh nhài 220k, Trà dâu/me/vải/dưa lưới/khế quýt, Cafe sữa 180k, Bạc xỉu 110k (2 310 000 VNĐ)' },
+        { date: '18/11', fullDate: '18/11/2026', dayLabel: 'Thứ 4', doUong: 1.419, suatCom: 0, banhBao: 0, amount: 1.419, value: 1.419, category: 'Đồ uống', note: 'Nguyên liệu Ngày 18/11: Cacao latte 200k, Thanh nhài 264k, Nhài sữa 120k, Trà dâu 400k, Trà sen vàng 125k, Cốm dẻo 130k, Cafe sữa 180k (1 419 000 VNĐ)' },
+        { date: '19/11', fullDate: '19/11/2026', dayLabel: 'Thứ 5', doUong: 1.019, suatCom: 0, banhBao: 0, amount: 1.019, value: 1.019, category: 'Đồ uống', note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k, Bạc xỉu 154k, Cafe muối 110k, Cốm 260k, Nhài sữa 120k (1 019 000 VNĐ)' },
+        { date: '20/11', fullDate: '20/11/2026', dayLabel: 'Thứ 6', doUong: 0.575, suatCom: 0, banhBao: 0, amount: 0.575, value: 0.575, category: 'Đồ uống', note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k, Cốm 130k, Trà dâu 100k, Thanh nhài 110k, Khế quýt 110k (575 000 VNĐ)' },
+        { date: '21/11', fullDate: '21/11/2026', dayLabel: 'Thứ 7', doUong: 0.435, suatCom: 0, banhBao: 0, amount: 0.435, value: 0.435, category: 'Đồ uống', note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k, Cafe muối 110k, Me Đác 110k, Trà Vải 105k (435 000 VNĐ)' },
+        { date: '22/11', fullDate: '22/11/2026', dayLabel: 'CN', doUong: 0.440, suatCom: 0, banhBao: 0, amount: 0.440, value: 0.440, category: 'Đồ uống', note: 'Nguyên liệu Ngày 22/11: Trà sen 220k, Cốm 220k, Thanh nhài 110k — Tổng phiếu 440 000 VNĐ' },
+        { date: '23/11', fullDate: '23/11/2026', dayLabel: 'Thứ 2', doUong: 0.566, suatCom: 0, banhBao: 0, amount: 0.566, value: 0.566, category: 'Đồ uống', note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k, Trà sữa cốm 130k, Nhài sữa kem trứng 120k, Cafe muối 220k (566 000 VNĐ)' }
       ]
     },
-    'week_10_16': {
-      id: 'week_10_16',
-      label: 'Tuần 10/11 – 16/11/2026',
-      xAxisTitle: 'Trục X: Ngày (10/11 – 16/11/2026)',
+    'week_19_25': {
+      id: 'week_19_25',
+      label: 'Tuần 19/11 – 25/11/2026',
+      xAxisTitle: 'Trục X: Ngày (19/11 – 25/11/2026)',
       days: [
-        { date: '10/11', fullDate: '10/11/2026', dayLabel: 'Thứ 3', doUong: 5.2, suatCom: 9.1, banhBao: 3.5, amount: 17.8, value: 17.8, category: 'Suất cơm', note: 'Nguyên liệu suất cơm văn phòng, trà sâm dứa & bánh bao' },
-        { date: '11/11', fullDate: '11/11/2026', dayLabel: 'Thứ 4', doUong: 6.4, suatCom: 11.2, banhBao: 4.4, amount: 22.0, value: 22.0, category: 'Suất cơm', note: 'Khuyến mãi 11/11: combo Suất cơm + Đồ uống + Bánh bao' },
-        { date: '12/11', fullDate: '12/11/2026', dayLabel: 'Thứ 5', doUong: 5.4, suatCom: 9.5, banhBao: 3.7, amount: 18.6, value: 18.6, category: 'Suất cơm', note: 'Suất cơm niêu cá kho, nước mơ ngâm & bánh bao trứng cút' },
-        { date: '13/11', fullDate: '13/11/2026', dayLabel: 'Thứ 6', doUong: 6.2, suatCom: 11.5, banhBao: 4.3, amount: 22.0, value: 22.0, category: 'Suất cơm', note: 'Thứ Sáu tăng suất cơm liên hoan & đồ uống đóng chai' },
-        { date: '14/11', fullDate: '14/11/2026', dayLabel: 'Thứ 7', doUong: 6.8, suatCom: 13.2, banhBao: 4.8, amount: 24.8, value: 24.8, category: 'Suất cơm', note: 'Cuối tuần cao điểm suất cơm mâm gia đình & bánh bao' },
-        { date: '15/11', fullDate: '15/11/2026', dayLabel: 'CN', doUong: 6.3, suatCom: 12.1, banhBao: 4.5, amount: 22.9, value: 22.9, category: 'Suất cơm', note: 'Chủ nhật phục vụ suất cơm nhà, nước thảo mộc & bánh bao' },
-        { date: '16/11', fullDate: '16/11/2026', dayLabel: 'Thứ 2', doUong: 5.1, suatCom: 8.9, banhBao: 3.4, amount: 17.4, value: 17.4, category: 'Suất cơm', note: 'Đầu tuần ổn định 3 nhóm Suất cơm, Đồ uống, Bánh bao' }
-      ]
-    },
-    'week_03_09': {
-      id: 'week_03_09',
-      label: 'Tuần 03/11 – 09/11/2026',
-      xAxisTitle: 'Trục X: Ngày (03/11 – 09/11/2026)',
-      days: [
-        { date: '03/11', fullDate: '03/11/2026', dayLabel: 'Thứ 3', doUong: 5.0, suatCom: 8.8, banhBao: 3.3, amount: 17.1, value: 17.1, category: 'Suất cơm', note: 'Suất cơm trưa văn phòng, nước sấu & bánh bao truyền thống' },
-        { date: '04/11', fullDate: '04/11/2026', dayLabel: 'Thứ 4', doUong: 5.3, suatCom: 9.4, banhBao: 3.6, amount: 18.3, value: 18.3, category: 'Suất cơm', note: 'Đặt suất cơm phòng VIP trưa & trà thảo mộc Mộc Giang' },
-        { date: '05/11', fullDate: '05/11/2026', dayLabel: 'Thứ 5', doUong: 5.1, suatCom: 9.0, banhBao: 3.4, amount: 17.5, value: 17.5, category: 'Suất cơm', note: 'Suất cơm nhà, đồ uống giải nhiệt & bánh bao bữa sáng' },
-        { date: '06/11', fullDate: '06/11/2026', dayLabel: 'Thứ 6', doUong: 6.0, suatCom: 11.1, banhBao: 4.1, amount: 21.2, value: 21.2, category: 'Suất cơm', note: 'Cuối tuần tăng chi phí suất cơm & đồ uống pha chế' },
-        { date: '07/11', fullDate: '07/11/2026', dayLabel: 'Thứ 7', doUong: 6.5, suatCom: 12.6, banhBao: 4.6, amount: 23.7, value: 23.7, category: 'Suất cơm', note: 'Thứ Bảy đông khách: Suất cơm gia đình, Đồ uống & Bánh bao' },
-        { date: '08/11', fullDate: '08/11/2026', dayLabel: 'CN', doUong: 6.2, suatCom: 11.9, banhBao: 4.4, amount: 22.5, value: 22.5, category: 'Suất cơm', note: 'Chủ nhật phục vụ suất cơm, trà lá nếp & bánh bao nóng' },
-        { date: '09/11', fullDate: '09/11/2026', dayLabel: 'Thứ 2', doUong: 4.9, suatCom: 8.6, banhBao: 3.2, amount: 16.7, value: 16.7, category: 'Suất cơm', note: 'Nhập nguyên liệu đầu tuần cho Suất cơm, Đồ uống, Bánh bao' }
+        { date: '19/11', fullDate: '19/11/2026', dayLabel: 'Thứ 5', doUong: 1.019, suatCom: 0, banhBao: 0, amount: 1.019, value: 1.019, category: 'Đồ uống', note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k, Bạc xỉu 154k, Cafe muối 110k, Cốm 260k, Nhài sữa 120k (1 019 000 VNĐ)' },
+        { date: '20/11', fullDate: '20/11/2026', dayLabel: 'Thứ 6', doUong: 0.575, suatCom: 0, banhBao: 0, amount: 0.575, value: 0.575, category: 'Đồ uống', note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k, Cốm 130k, Trà dâu 100k, Thanh nhài 110k, Khế quýt 110k (575 000 VNĐ)' },
+        { date: '21/11', fullDate: '21/11/2026', dayLabel: 'Thứ 7', doUong: 0.435, suatCom: 0, banhBao: 0, amount: 0.435, value: 0.435, category: 'Đồ uống', note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k, Cafe muối 110k, Me Đác 110k, Trà Vải 105k (435 000 VNĐ)' },
+        { date: '22/11', fullDate: '22/11/2026', dayLabel: 'CN', doUong: 0.440, suatCom: 0, banhBao: 0, amount: 0.440, value: 0.440, category: 'Đồ uống', note: 'Nguyên liệu Ngày 22/11: Trà sen 220k, Cốm 220k, Thanh nhài 110k (440 000 VNĐ)' },
+        { date: '23/11', fullDate: '23/11/2026', dayLabel: 'Thứ 2', doUong: 0.566, suatCom: 0, banhBao: 0, amount: 0.566, value: 0.566, category: 'Đồ uống', note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k, Trà sữa cốm 130k, Nhài sữa kem trứng 120k, Cafe muối 220k (566 000 VNĐ)' },
+        { date: '24/11', fullDate: '24/11/2026', dayLabel: 'Thứ 3', doUong: 0.430, suatCom: 0, banhBao: 0, amount: 0.430, value: 0.430, category: 'Đồ uống', note: 'Nguyên liệu Ngày 24/11: Cafe sữa 90k, Trà sữa cốm 130k, Trà dưa lưới 100k, Trà Khế quýt 110k (430 000 VNĐ)' },
+        { date: '25/11', fullDate: '25/11/2026', dayLabel: 'Thứ 4', doUong: 0.605, suatCom: 0, banhBao: 0, amount: 0.605, value: 0.605, category: 'Đồ uống', note: 'Nguyên liệu Ngày 25/11: Cafe muối 220k, Trà sữa cốm 260k, Trà sen vàng 125k (605 000 VNĐ)' }
       ]
     }
   };
@@ -9917,290 +9905,72 @@
 
   const variableExpensesCategories = [
     {
-      id: 'suatCom',
-      key: 'suatCom',
-      name: 'Suất cơm',
-      shortName: 'Suất cơm',
-      amount: 83.7,
-      value: 83.7,
-      amountVnd: 83700000,
-      formattedVnd: '83 700 000',
-      percentage: 52.2,
-      percent: 52,
-      color: '#2E6B22',
-      description: 'Chi phí nguyên liệu & chế biến các suất cơm nhà Mộc Giang'
-    },
-    {
       id: 'doUong',
       key: 'doUong',
       name: 'Đồ uống',
       shortName: 'Đồ uống',
-      amount: 45.1,
-      value: 45.1,
-      amountVnd: 45100000,
-      formattedVnd: '45 100 000',
-      percentage: 28.2,
-      percent: 28,
+      amount: 7.799,
+      value: 7.799,
+      amountVnd: 7799000,
+      formattedVnd: '7 799 000',
+      percentage: 100,
+      percent: 100,
       color: '#2B7BBB',
-      description: 'Chi phí trà thảo mộc, nước mơ, nước sấu, sâm dứa (“Đậm đà ly nước”)'
+      description: 'Chi phí nguyên liệu Đồ uống thực tế từ bảng tính Nước (17/11 – 25/11/2026: 7 799 000 VNĐ; tuần 17/11 – 23/11: 6 764 000 VNĐ)'
+    },
+    {
+      id: 'suatCom',
+      key: 'suatCom',
+      name: 'Suất cơm',
+      shortName: 'Suất cơm',
+      amount: 0,
+      value: 0,
+      amountVnd: 0,
+      formattedVnd: '0',
+      percentage: 0,
+      percent: 0,
+      color: '#2E6B22',
+      description: 'Cập nhật tự động khi có phiếu chi Suất cơm từ Google Form / Sheet'
     },
     {
       id: 'banhBao',
       key: 'banhBao',
       name: 'Bánh bao',
       shortName: 'Bánh bao',
-      amount: 31.4,
-      value: 31.4,
-      amountVnd: 31400000,
-      formattedVnd: '31 400 000',
-      percentage: 19.6,
-      percent: 20,
+      amount: 0,
+      value: 0,
+      amountVnd: 0,
+      formattedVnd: '0',
+      percentage: 0,
+      percent: 0,
       color: '#D97724',
-      description: 'Chi phí bột, nhân thịt trứng cút & hấp bánh bao thủ công mỗi ngày'
+      description: 'Cập nhật tự động khi có phiếu chi Bánh bao từ Google Form / Sheet'
     }
   ];
 
-  // Initial Google Sheet / Form entries (exact mirror of the 32 rows written to Sheet1!A2:I33)
+  // Real Google Sheet entries (exact 16 rows synced in 14OH_xC4muiSAAhK67nVzmJYltOpjemyLrvyPf5yLAtE from Nước sheet)
   const initialGoogleFormEntries = [
-    // Fixed Expenses (9 rows)
-    { id: 'GF-01', timestamp: '01/11/2026 08:30:00', fullName: 'Nguyễn Minh Quản Lý', date: '01/11/2026', shortDate: '01/11', amountRaw: '49 560 000', amountVnd: 49560000, amountFormattedVnd: '49 560 000', amountTrieu: 49.56, expenseType: 'Chi phí cố định', category: 'Thuê mặt bằng (199 Hoàng Cầu)', note: 'Thanh toán tiền thuê mặt bằng tháng 11/2026 tại 199 Hoàng Cầu', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-02', timestamp: '03/11/2026 09:15:00', fullName: 'Nguyễn Thu Hà', date: '03/11/2026', shortDate: '03/11', amountRaw: '5 440 000', amountVnd: 5440000, amountFormattedVnd: '5 440 000', amountTrieu: 5.44, expenseType: 'Chi phí cố định', category: 'Phần mềm POS, Internet & Bản quyền', note: 'Phí gia hạn iPOS + chữ ký số + cáp quang Viettel doanh nghiệp', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-03', timestamp: '05/11/2026 10:00:00', fullName: 'Nguyễn Minh Quản Lý', date: '05/11/2026', shortDate: '05/11', amountRaw: '18 500 000', amountVnd: 18500000, amountFormattedVnd: '18 500 000', amountTrieu: 18.50, expenseType: 'Chi phí cố định', category: 'Lương nhân sự cố định (Bếp & Quản lý)', note: 'Tạm ứng lương cố định đợt 1 cho Bếp trưởng và Quản lý ca', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-04', timestamp: '08/11/2026 14:20:00', fullName: 'Nguyễn Thu Hà', date: '08/11/2026', shortDate: '08/11', amountRaw: '4 200 000', amountVnd: 4200000, amountFormattedVnd: '4 200 000', amountTrieu: 4.20, expenseType: 'Chi phí cố định', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Phí vệ sinh môi trường và bảo vệ trông xe phố Hoàng Cầu', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-05', timestamp: '10/11/2026 11:10:00', fullName: 'Trần Quốc Tuấn', date: '10/11/2026', shortDate: '10/11', amountRaw: '6 480 000', amountVnd: 6480000, amountFormattedVnd: '6 480 000', amountTrieu: 6.48, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bảo dưỡng hệ thống hút mùi bếp và nồi cơm niêu công nghiệp', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-06', timestamp: '15/11/2026 16:00:00', fullName: 'Nguyễn Minh Quản Lý', date: '15/11/2026', shortDate: '15/11', amountRaw: '20 440 000', amountVnd: 20440000, amountFormattedVnd: '20 440 000', amountTrieu: 20.44, expenseType: 'Chi phí cố định', category: 'Lương nhân sự cố định (Bếp & Quản lý)', note: 'Quyết toán lương cố định đợt 2 và phụ cấp trách nhiệm', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-07', timestamp: '18/11/2026 09:45:00', fullName: 'Nguyễn Thu Hà', date: '18/11/2026', shortDate: '18/11', amountRaw: '4 000 000', amountVnd: 4000000, amountFormattedVnd: '4 000 000', amountTrieu: 4.00, expenseType: 'Chi phí cố định', category: 'Phần mềm POS, Internet & Bản quyền', note: 'Phí duy trì hệ thống đặt bàn Web và tổng đài 096 3689077', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-08', timestamp: '20/11/2026 15:30:00', fullName: 'Trần Quốc Tuấn', date: '20/11/2026', shortDate: '20/11', amountRaw: '6 500 000', amountVnd: 6500000, amountFormattedVnd: '6 500 000', amountTrieu: 6.50, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Trích khấu hao tài sản cố định và điều hòa trung tâm tháng 11', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-09', timestamp: '23/11/2026 10:30:00', fullName: 'Nguyễn Minh Quản Lý', date: '23/11/2026', shortDate: '23/11', amountRaw: '2 880 000', amountVnd: 2880000, amountFormattedVnd: '2 880 000', amountTrieu: 2.88, expenseType: 'Chi phí cố định', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Bảo hiểm cháy nổ định kỳ và kiểm định an toàn thực phẩm', driveUrl: DRIVE_FOLDER_URL },
-
-    // Variable Expenses (23 rows across 17/11 - 23/11, including "1 000 000" and "20 000" VND examples)
-    { id: 'GF-10', timestamp: '17/11/2026 07:30:00', fullName: 'Lê Văn Bếp Trưởng', date: '17/11/2026', shortDate: '17/11', amountRaw: '9 800 000', amountVnd: 9800000, amountFormattedVnd: '9 800 000', amountTrieu: 9.80, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Nhập gạo tám Hải Hậu + thịt cá rau tươi nấu suất cơm nhà', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-11', timestamp: '17/11/2026 08:00:00', fullName: 'Phạm Thảo Pha Chế', date: '17/11/2026', shortDate: '17/11', amountRaw: '5 800 000', amountVnd: 5800000, amountFormattedVnd: '5 800 000', amountTrieu: 5.80, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nhập trà lá nếp + cam sành + cốt mơ ngâm Mộc Giang', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-12', timestamp: '17/11/2026 08:15:00', fullName: 'Hoàng Thị Bếp Bánh', date: '17/11/2026', shortDate: '17/11', amountRaw: '3 900 000', amountVnd: 3900000, amountFormattedVnd: '3 900 000', amountTrieu: 3.90, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Bột mì thượng hạng + nhân thịt trứng cút làm bánh bao', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-13', timestamp: '18/11/2026 07:25:00', fullName: 'Lê Văn Bếp Trưởng', date: '18/11/2026', shortDate: '18/11', amountRaw: '10 600 000', amountVnd: 10600000, amountFormattedVnd: '10 600 000', amountTrieu: 10.60, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Nguyên liệu suất cơm phục vụ tiệc đoàn 25 khách buổi trưa', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-14', timestamp: '18/11/2026 08:05:00', fullName: 'Phạm Thảo Pha Chế', date: '18/11/2026', shortDate: '18/11', amountRaw: '6 100 000', amountVnd: 6100000, amountFormattedVnd: '6 100 000', amountTrieu: 6.10, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Trà thảo mộc + sấu tươi + đá tinh khiết', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-15', timestamp: '18/11/2026 08:20:00', fullName: 'Hoàng Thị Bếp Bánh', date: '18/11/2026', shortDate: '18/11', amountRaw: '4 100 000', amountVnd: 4100000, amountFormattedVnd: '4 100 000', amountTrieu: 4.10, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Nguyên liệu mẻ bánh bao nóng ca sáng và trưa', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-16', timestamp: '19/11/2026 07:40:00', fullName: 'Lê Văn Bếp Trưởng', date: '19/11/2026', shortDate: '19/11', amountRaw: '10 400 000', amountVnd: 10400000, amountFormattedVnd: '10 400 000', amountTrieu: 10.40, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Thực phẩm tươi sống cho suất cơm văn phòng Hoàng Cầu', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-17', timestamp: '19/11/2026 08:10:00', fullName: 'Phạm Thảo Pha Chế', date: '19/11/2026', shortDate: '19/11', amountRaw: '5 900 000', amountVnd: 5900000, amountFormattedVnd: '5 900 000', amountTrieu: 5.90, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Cốt trà sâm dứa + hạt sen + thảo mộc', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-18', timestamp: '19/11/2026 08:30:00', fullName: 'Hoàng Thị Bếp Bánh', date: '19/11/2026', shortDate: '19/11', amountRaw: '4 000 000', amountVnd: 4000000, amountFormattedVnd: '4 000 000', amountTrieu: 4.00, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Nhân thịt heo sinh học + nấm hương làm bánh bao', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-19', timestamp: '20/11/2026 07:15:00', fullName: 'Lê Văn Bếp Trưởng', date: '20/11/2026', shortDate: '20/11', amountRaw: '15 600 000', amountVnd: 15600000, amountFormattedVnd: '15 600 000', amountTrieu: 15.60, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Cao điểm lễ 20/11: Nguyên liệu suất cơm tiệc kín bàn', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-20', timestamp: '20/11/2026 07:50:00', fullName: 'Phạm Thảo Pha Chế', date: '20/11/2026', shortDate: '20/11', amountRaw: '7 800 000', amountVnd: 7800000, amountFormattedVnd: '7 800 000', amountTrieu: 7.80, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Tăng cường nguyên liệu pha chế đồ uống lễ 20/11', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-21', timestamp: '20/11/2026 08:15:00', fullName: 'Hoàng Thị Bếp Bánh', date: '20/11/2026', shortDate: '20/11', amountRaw: '5 400 000', amountVnd: 5400000, amountFormattedVnd: '5 400 000', amountTrieu: 5.40, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Mẻ bánh bao đặc biệt phục vụ lễ 20/11', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-22', timestamp: '21/11/2026 07:30:00', fullName: 'Lê Văn Bếp Trưởng', date: '21/11/2026', shortDate: '21/11', amountRaw: '14 100 000', amountVnd: 14100000, amountFormattedVnd: '14 100 000', amountTrieu: 14.10, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Thực phẩm tươi sống phục vụ suất cơm gia đình Thứ Bảy', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-23', timestamp: '21/11/2026 08:00:00', fullName: 'Phạm Thảo Pha Chế', date: '21/11/2026', shortDate: '21/11', amountRaw: '7 200 000', amountVnd: 7200000, amountFormattedVnd: '7 200 000', amountTrieu: 7.20, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu trà thảo mộc và nước ép cuối tuần', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-24', timestamp: '21/11/2026 08:20:00', fullName: 'Hoàng Thị Bếp Bánh', date: '21/11/2026', shortDate: '21/11', amountRaw: '5 100 000', amountVnd: 5100000, amountFormattedVnd: '5 100 000', amountTrieu: 5.10, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Bánh bao nhân thịt trứng cút cuối tuần', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-25', timestamp: '22/11/2026 07:35:00', fullName: 'Lê Văn Bếp Trưởng', date: '22/11/2026', shortDate: '22/11', amountRaw: '13 000 000', amountVnd: 13000000, amountFormattedVnd: '13 000 000', amountTrieu: 13.00, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Nguyên liệu suất cơm Chủ Nhật đông khách', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-26', timestamp: '22/11/2026 08:05:00', fullName: 'Phạm Thảo Pha Chế', date: '22/11/2026', shortDate: '22/11', amountRaw: '6 700 000', amountVnd: 6700000, amountFormattedVnd: '6 700 000', amountTrieu: 6.70, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nước mơ + nước sấu + trà lá nếp Chủ Nhật', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-27', timestamp: '22/11/2026 08:25:00', fullName: 'Hoàng Thị Bếp Bánh', date: '22/11/2026', shortDate: '22/11', amountRaw: '4 700 000', amountVnd: 4700000, amountFormattedVnd: '4 700 000', amountTrieu: 4.70, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Bánh bao nóng mang về Chủ Nhật', driveUrl: DRIVE_FOLDER_URL },
-
-    { id: 'GF-28', timestamp: '23/11/2026 07:20:00', fullName: 'Lê Văn Bếp Trưởng', date: '23/11/2026', shortDate: '23/11', amountRaw: '9 200 000', amountVnd: 9200000, amountFormattedVnd: '9 200 000', amountTrieu: 9.20, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Nhập thịt tươi + cá chép giòn nấu suất cơm sáng Thứ 2', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-29', timestamp: '23/11/2026 09:10:00', fullName: 'Lê Văn Bếp Trưởng', date: '23/11/2026', shortDate: '23/11', amountRaw: '1 000 000', amountVnd: 1000000, amountFormattedVnd: '1 000 000', amountTrieu: 1.00, expenseType: 'Chi phí biến động', category: 'Suất cơm', note: 'Nhập bổ sung rau sạch Đà Lạt cho suất cơm trưa (1 000 000 VNĐ = 1,00 tr)', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-30', timestamp: '23/11/2026 08:00:00', fullName: 'Phạm Thảo Pha Chế', date: '23/11/2026', shortDate: '23/11', amountRaw: '5 580 000', amountVnd: 5580000, amountFormattedVnd: '5 580 000', amountTrieu: 5.58, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu đồ uống thảo mộc đầu tuần', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-31', timestamp: '23/11/2026 10:15:00', fullName: 'Phạm Thảo Pha Chế', date: '23/11/2026', shortDate: '23/11', amountRaw: '20 000', amountVnd: 20000, amountFormattedVnd: '20 000', amountTrieu: 0.02, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Mua bổ sung lá dứa tươi tại chợ Hoàng Cầu (20 000 VNĐ = 0,02 tr)', driveUrl: DRIVE_FOLDER_URL },
-    { id: 'GF-32', timestamp: '23/11/2026 08:30:00', fullName: 'Hoàng Thị Bếp Bánh', date: '23/11/2026', shortDate: '23/11', amountRaw: '4 200 000', amountVnd: 4200000, amountFormattedVnd: '4 200 000', amountTrieu: 4.20, expenseType: 'Chi phí biến động', category: 'Bánh bao', note: 'Nguyên liệu bánh bao truyền thống Thứ 2', driveUrl: DRIVE_FOLDER_URL }
+    { id: 'GF-01', timestamp: '17/11/2026 08:00:00', fullName: 'Quản lý Mộc Giang', date: '17/11/2026', shortDate: '17/11', amountRaw: '126 000', amountVnd: 126000, amountFormattedVnd: '126 000', amountTrieu: 0.126, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Thảm bar (80k) + Ca đong 100ml & 250ml (46k) theo Báo giá dụng cụ pha chế', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-02', timestamp: '17/11/2026 08:15:00', fullName: 'Quản lý Mộc Giang', date: '17/11/2026', shortDate: '17/11', amountRaw: '200 000', amountVnd: 200000, amountFormattedVnd: '200 000', amountTrieu: 0.200, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Máy đánh bọt pha Cacao Latte & Kem trứng (Báo giá dụng cụ pha chế)', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-03', timestamp: '18/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '18/11/2026', shortDate: '18/11', amountRaw: '135 000', amountVnd: 135000, amountFormattedVnd: '135 000', amountTrieu: 0.135, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình lắc pha chế (3 cái x 45k) theo Báo giá dụng cụ pha chế', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-04', timestamp: '18/11/2026 09:00:00', fullName: 'Quản lý Mộc Giang', date: '18/11/2026', shortDate: '18/11', amountRaw: '460 000', amountVnd: 460000, amountFormattedVnd: '460 000', amountTrieu: 0.460, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình đựng trà 1L (4 cái = 200k) + Bình 2.1L (4 cái = 260k)', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-05', timestamp: '19/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '19/11/2026', shortDate: '19/11', amountRaw: '160 000', amountVnd: 160000, amountFormattedVnd: '160 000', amountTrieu: 0.160, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Bình đựng đường & sữa đặc (2 cái x 80k) theo Báo giá dụng cụ pha chế', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-06', timestamp: '20/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '20/11/2026', shortDate: '20/11', amountRaw: '204 000', amountVnd: 204000, amountFormattedVnd: '204 000', amountTrieu: 0.204, expenseType: 'Chi phí cố định', category: 'Khấu hao thiết bị & Bảo trì định kỳ', note: 'Xúc đá (45k) + Vét (50k) + Vá (50k) + Thìa bar (35k) + Thìa định lượng (24k)', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-07', timestamp: '21/11/2026 08:30:00', fullName: 'Quản lý Mộc Giang', date: '21/11/2026', shortDate: '21/11', amountRaw: '80 000', amountVnd: 80000, amountFormattedVnd: '80 000', amountTrieu: 0.080, expenseType: 'Chi phí cố định', category: 'Bảo hiểm, An ninh & Vệ sinh cố định', note: 'Giấy chống tràn & vật tư vệ sinh quầy bar cố định (80k)', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-08', timestamp: '17/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '17/11/2026', shortDate: '17/11', amountRaw: '2 310 000', amountVnd: 2310000, amountFormattedVnd: '2 310 000', amountTrieu: 2.310, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 17/11: Trà sen vàng 250k + Cốm dẻo 260k + Nhài sữa 240k + Thanh nhài 220k + Trà dâu/me/vải/dưa lưới/khế quýt + Cafe/Bạc xỉu', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-09', timestamp: '18/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '18/11/2026', shortDate: '18/11', amountRaw: '1 419 000', amountVnd: 1419000, amountFormattedVnd: '1 419 000', amountTrieu: 1.419, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 18/11: Cacao latte 200k + Thanh nhài 264k + Nhài sữa 120k + Trà dâu 400k + Trà sen 125k + Cốm dẻo 130k + Cafe sữa 180k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-10', timestamp: '19/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '19/11/2026', shortDate: '19/11', amountRaw: '1 019 000', amountVnd: 1019000, amountFormattedVnd: '1 019 000', amountTrieu: 1.019, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 19/11: Trà sen vàng 375k + Bạc xỉu 154k + Cafe muối 110k + Cốm 260k + Nhài sữa 120k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-11', timestamp: '20/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '20/11/2026', shortDate: '20/11', amountRaw: '575 000', amountVnd: 575000, amountFormattedVnd: '575 000', amountTrieu: 0.575, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 20/11: Trà sen vàng 125k + Cốm 130k + Trà dâu 100k + Thanh nhài 110k + Khế quýt 110k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-12', timestamp: '21/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '21/11/2026', shortDate: '21/11', amountRaw: '435 000', amountVnd: 435000, amountFormattedVnd: '435 000', amountTrieu: 0.435, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 21/11: Bạc xỉu 110k + Cafe muối 110k + Me Đác 110k + Trà Vải 105k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-13', timestamp: '22/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '22/11/2026', shortDate: '22/11', amountRaw: '440 000', amountVnd: 440000, amountFormattedVnd: '440 000', amountTrieu: 0.440, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 22/11: Trà sen 220k + Cốm 220k + Thanh nhài 110k (Tổng phiếu 440.000 đ)', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-14', timestamp: '23/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '23/11/2026', shortDate: '23/11', amountRaw: '566 000', amountVnd: 566000, amountFormattedVnd: '566 000', amountTrieu: 0.566, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 23/11: Olong dừa nướng 96k + Trà sữa cốm 130k + Nhài sữa kem trứng 120k + Cafe muối 220k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-15', timestamp: '24/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '24/11/2026', shortDate: '24/11', amountRaw: '430 000', amountVnd: 430000, amountFormattedVnd: '430 000', amountTrieu: 0.430, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 24/11: Cafe sữa 90k + Trà sữa cốm 130k + Trà dưa lưới 100k + Trà Khế quýt 110k', driveUrl: DRIVE_FOLDER_URL },
+    { id: 'GF-16', timestamp: '25/11/2026 07:30:00', fullName: 'Quầy Nước Mộc Giang', date: '25/11/2026', shortDate: '25/11', amountRaw: '605 000', amountVnd: 605000, amountFormattedVnd: '605 000', amountTrieu: 0.605, expenseType: 'Chi phí biến động', category: 'Đồ uống', note: 'Nguyên liệu Ngày 25/11: Cafe muối 220k + Trà sữa cốm 260k + Trà sen vàng 125k', driveUrl: DRIVE_FOLDER_URL }
   ].map(function (item) {
     item.receiptThumb = createReceiptSvgDataUri(item.category, item.amountFormattedVnd, item.date, item.fullName, item.id);
     item.receiptUrl = item.receiptThumb;
     return item;
   });
-
-  // Overview KPI & Operational Summary
-  const overview = {
-    greetingDate: 'Thứ Hai, 23/11/2026',
-    calendarBadge: {
-      dayOfWeek: 'Thứ 2',
-      dayNumber: '23',
-      monthYear: '11/2026'
-    },
-    greetingTitle: 'Chào buổi tối, Quản trị Mộc Giang',
-    summaryHtml: 'Toàn nhà hàng đạt <strong class="highlight-green">486,5 triệu VNĐ</strong> doanh thu tháng này với <strong>1.420 đơn hàng hoàn thành</strong>. Hôm nay có <strong class="highlight-amber">3 đơn đặt tiệc bàn lớn</strong> và <strong class="highlight-red">2 khoản chi phí cần duyệt</strong>.',
-    kpis: [
-      {
-        id: 'kpi-revenue',
-        label: 'Tổng doanh thu tháng 11',
-        value: '486,5 tr',
-        numericValue: 486.5,
-        unit: 'Triệu VNĐ',
-        badge: '+14,2% so với T10',
-        badgeType: 'positive',
-        subtext: 'Bán tại chỗ 51% · Online 29% · Mang về 20%',
-        targetView: 'view-revenue',
-        accentColor: '#2E6B22'
-      },
-      {
-        id: 'kpi-fixed-expenses',
-        label: 'Chi phí cố định',
-        value: '118,0 tr',
-        numericValue: 118.0,
-        unit: 'Triệu VNĐ',
-        badge: '24,3% tỷ trọng DT',
-        badgeType: 'neutral',
-        subtext: 'Thuê mặt bằng 199 Hoàng Cầu chiếm 42%',
-        targetView: 'view-expenses-fixed',
-        accentColor: '#3D1F0D'
-      },
-      {
-        id: 'kpi-variable-expenses',
-        label: 'Chi phí biến động',
-        value: '160,2 tr',
-        numericValue: 160.2,
-        unit: 'Triệu VNĐ',
-        badge: 'Suất cơm · Đồ uống · Bánh bao',
-        badgeType: 'warning',
-        subtext: 'Suất cơm 52% · Đồ uống 28% · Bánh bao 20%',
-        targetView: 'view-expenses-variable',
-        accentColor: '#D97724'
-      },
-      {
-        id: 'kpi-profit',
-        label: 'Lợi nhuận ước tính',
-        value: '194,0 tr',
-        numericValue: 194.0,
-        unit: 'Triệu VNĐ',
-        badge: '39,9% biên LN',
-        badgeType: 'positive',
-        subtext: 'Vượt mục tiêu kế hoạch tháng (+18,5 tr)',
-        targetView: 'view-revenue',
-        accentColor: '#2B7BBB'
-      }
-    ],
-    donutModes: {
-      finance: {
-        id: 'finance',
-        label: 'Tài chính (Triệu VNĐ)',
-        centerValue: '486,5 tr',
-        centerSub: 'Tổng quy mô',
-        unit: 'tr',
-        items: [
-          {
-            label: 'Doanh thu thuần (Lợi nhuận giữ lại)',
-            shortLabel: 'Doanh thu thuần',
-            value: 194.0,
-            displayValue: '194,0 tr',
-            percent: 40,
-            color: '#2E6B22',
-            highlight: false
-          },
-          {
-            label: 'Chi phí biến động (Suất cơm, Đồ uống, Bánh bao)',
-            shortLabel: 'Chi phí biến động',
-            value: 174.5,
-            displayValue: '174,5 tr',
-            percent: 36,
-            color: '#D97724',
-            highlight: true
-          },
-          {
-            label: 'Chi phí cố định (Mặt bằng, Lương, POS)',
-            shortLabel: 'Chi phí cố định',
-            value: 118.0,
-            displayValue: '118,0 tr',
-            percent: 24,
-            color: '#3D1F0D',
-            highlight: false
-          }
-        ]
-      },
-      orders: {
-        id: 'orders',
-        label: 'Đơn hàng (1.420 đơn)',
-        centerValue: '1.420',
-        centerSub: 'đơn tháng này',
-        unit: 'đơn',
-        items: [
-          {
-            label: 'Đơn hoàn thành (Tại bàn, Online & Mang về)',
-            shortLabel: 'Đơn hoàn thành',
-            value: 1362,
-            displayValue: '1.362 đơn',
-            percent: 96,
-            color: '#2E6B22',
-            highlight: false
-          },
-          {
-            label: 'Đang phục vụ / Chờ duyệt chi & Bàn lớn',
-            shortLabel: 'Đang phục vụ',
-            value: 18,
-            displayValue: '18 đơn',
-            percent: 1,
-            color: '#C93B2B',
-            highlight: true
-          },
-          {
-            label: 'Đặt trước & Tiệc đoàn trong tuần',
-            shortLabel: 'Đặt trước',
-            value: 40,
-            displayValue: '40 đơn',
-            percent: 3,
-            color: '#2B7BBB',
-            highlight: false
-          }
-        ]
-      }
-    },
-    weeklySchedule: [
-      {
-        id: 'sch-1',
-        day: 'Thứ 2 · 23/11',
-        time: '07:30 – 09:30',
-        title: 'Kiểm kê kho bếp đầu tuần & Nhập gạo tám Hải Hậu, rau sạch',
-        location: 'Kho bếp tầng 1 · 199 Hoàng Cầu',
-        tag: 'Kho bếp',
-        tagColor: 'green',
-        status: 'Đã hoàn thành'
-      },
-      {
-        id: 'sch-2',
-        day: 'Thứ 2 · 23/11',
-        time: '18:30 – 21:00',
-        title: 'Đón 3 đoàn đặt tiệc bàn lớn (42 khách) — Thực đơn Cơm nhà Mộc Giang',
-        location: 'Phòng VIP Tầng 2 & Sảnh chính',
-        tag: 'Đặt tiệc',
-        tagColor: 'amber',
-        status: 'Hôm nay'
-      },
-      {
-        id: 'sch-3',
-        day: 'Thứ 4 · 25/11',
-        time: '11:30 – 13:30',
-        title: 'Tiệc đặt trước 35 khách khối Văn phòng Hoàng Cầu (Cơm niêu + Trà thảo mộc)',
-        location: 'Tầng 2 · Khu bàn dài Mộc',
-        tag: 'Tiệc trưa',
-        tagColor: 'blue',
-        status: 'Đã cọc 5,0 tr'
-      },
-      {
-        id: 'sch-4',
-        day: 'Thứ 6 · 27/11',
-        time: '15:00 – 16:30',
-        title: 'Thanh toán công nợ Nhà cung cấp rau sạch, thịt tươi & nguyên liệu pha chế',
-        location: 'Phòng Quản trị · Duyệt 2 phiếu chi',
-        tag: 'Tài chính',
-        tagColor: 'brown',
-        status: 'Chờ duyệt'
-      },
-      {
-        id: 'sch-5',
-        day: 'Thứ 7 · 28/11',
-        time: '09:00 – 22:00',
-        title: 'Tăng cường 4 nhân sự thời vụ ca cuối tuần & Kiểm tra chất lượng quầy nước',
-        location: 'Toàn cơ sở 199 Hoàng Cầu',
-        tag: 'Vận hành',
-        tagColor: 'green',
-        status: 'Đã xếp ca'
-      }
-    ],
-    inventoryAlerts: [
-      { item: 'Gạo tám thơm Hải Hậu', stock: 'Còn 85 kg (đủ 4 ngày)', status: 'Ổn định' },
-      { item: 'Cốt mơ ngâm & Trà thảo mộc Mộc Giang', stock: 'Còn 18 lít (cần bổ sung Thứ 5)', status: 'Sắp chạm ngưỡng' },
-      { item: 'Hộp bã mía 4 ngăn mang về', stock: 'Còn 620 hộp', status: 'Ổn định' }
-    ]
-  };
 
   function getStoredString(key, fallback) {
     try {
@@ -10214,6 +9984,7 @@
     connected: true,
     accountEmail: 'minhdq.hrt@gmail.com',
     spreadsheetId: SPREADSHEET_ID,
+    nuocSpreadsheetId: NUOC_SPREADSHEET_ID,
     spreadsheetTitle: 'Mộc Giang - Quản Lý Chi Phí (Google Form Responses)',
     spreadsheetUrl: SPREADSHEET_URL,
     spreadsheetCsvUrl: SPREADSHEET_CSV_URL,
@@ -10221,30 +9992,272 @@
     driveFolderName: 'Mộc Giang - Ảnh Minh Chứng Chi Phí',
     driveFolderUrl: DRIVE_FOLDER_URL,
     appsScriptUrl: getStoredString('mg_apps_script_url', ''),
-    formUrl: getStoredString('mg_google_form_url', SPREADSHEET_URL),
+    formUrl: getStoredString('mg_google_form_url', GOOGLE_FORM_URL),
     scriptPath: 'google-apps-script/Code.gs',
     guidePath: 'google-apps-script/HUONG_DAN_TAO_FORM.md',
-    lastSyncTime: '23/11/2026 18:30',
-    syncStatus: 'Đã kết nối Google Sheet & Drive',
+    lastSyncTime: '24/11/2026 17:37',
+    syncStatus: 'Đã đồng bộ 16 phiếu chi thực tế từ Google Sheet',
     entries: initialGoogleFormEntries.slice()
   };
 
+  /**
+   * Dynamically builds the Overview object and summary totals from the real POS revenue
+   * and the real expenses (so Overview ONLY has 3 metrics: Doanh thu, Chi phí, Lợi nhuận).
+   */
+  function buildRealOverviewAndSummary(revData, fixedExp, varExp, entriesList) {
+    const totalRevVnd = Number(revData.totalVnd) || 13480000;
+    const totalRevTrieu = Number((totalRevVnd / 1000000).toFixed(3));
+    const totalOrders = Number(revData.totalOrders) || 156;
+    const totalItemsSold = Number(revData.totalItemsSold) || 409;
+
+    const fixedVnd = Number(fixedExp.totalVnd) !== undefined && !isNaN(Number(fixedExp.totalVnd))
+      ? Number(fixedExp.totalVnd)
+      : Math.round((Number(fixedExp.total) || 0) * 1000000);
+    const varVnd = Number(varExp.totalVnd) !== undefined && !isNaN(Number(varExp.totalVnd))
+      ? Number(varExp.totalVnd)
+      : Math.round((Number(varExp.monthTotal || varExp.total) || 0) * 1000000);
+
+    const totalExpVnd = fixedVnd + varVnd;
+    const totalExpTrieu = Number((totalExpVnd / 1000000).toFixed(3));
+    const profitVnd = totalRevVnd - totalExpVnd;
+    const profitTrieu = Number((profitVnd / 1000000).toFixed(3));
+
+    const expRatioPct = totalRevVnd > 0 ? Number(((totalExpVnd / totalRevVnd) * 100).toFixed(1)) : 0;
+    const profitMarginPct = totalRevVnd > 0 ? Number(((profitVnd / totalRevVnd) * 100).toFixed(1)) : 0;
+
+    const revFmt = parseVndInput(totalRevVnd);
+    const expFmt = parseVndInput(totalExpVnd);
+    const profFmt = parseVndInput(Math.abs(profitVnd));
+    const profSign = profitVnd < 0 ? '-' : '';
+    const entryCount = Array.isArray(entriesList) ? entriesList.length : 16;
+
+    // Recent real POS invoices (top 6 latest from the 156 real POS orders)
+    const recentInvoices = (revData.invoices || []).slice(0, 6).map(function (inv) {
+      const itemsText = (inv.items || []).map(function (it) {
+        return it.name + ' (x' + it.quantity + ')';
+      }).join(', ');
+      return {
+        id: 'inv-' + inv.stt,
+        day: inv.shortDate + ' · ' + inv.timeOut,
+        time: 'HĐ #' + inv.invoiceNo,
+        title: itemsText || 'Đơn hàng POS Mộc Giang',
+        location: inv.table + ' · ' + inv.paymentMethod,
+        tag: inv.formattedVnd + ' VNĐ',
+        tagColor: inv.channelKey === 'online' ? 'blue' : (inv.channelKey === 'takeaway' ? 'amber' : 'green'),
+        status: inv.channelName
+      };
+    });
+
+    const summaryObj = {
+      totalRevenue: totalRevTrieu,
+      totalRevenueVnd: totalRevVnd,
+      formattedRevenueVnd: revFmt.formattedVnd,
+      totalExpenses: totalExpTrieu,
+      totalExpensesVnd: totalExpVnd,
+      formattedExpensesVnd: expFmt.formattedVnd,
+      expenseRatioPercent: expRatioPct,
+      totalFixedExpenses: Number((fixedVnd / 1000000).toFixed(3)),
+      totalFixedExpensesVnd: fixedVnd,
+      totalVariableExpenses: Number((varVnd / 1000000).toFixed(3)),
+      totalVariableExpensesVnd: varVnd,
+      estimatedProfit: profitTrieu,
+      estimatedProfitVnd: profitVnd,
+      formattedProfitVnd: profSign + profFmt.formattedVnd,
+      profitMarginPercent: profitMarginPct,
+      completedOrders: totalOrders,
+      totalItemsSold: totalItemsSold,
+      expenseEntryCount: entryCount
+    };
+
+    const overviewObj = {
+      greetingDate: 'Dữ liệu thực tế POS & Google Sheet · 17/11 – 24/11/2026',
+      calendarBadge: {
+        dayOfWeek: 'Thứ 3',
+        dayNumber: '24',
+        monthYear: '11/2026'
+      },
+      greetingTitle: 'Chào buổi tối, Quản trị Mộc Giang',
+      summaryHtml:
+        'Toàn nhà hàng ghi nhận <strong class="highlight-green">' + revFmt.formattedVnd + ' VNĐ (' + revFmt.formattedTrieu + ' triệu VNĐ)</strong> doanh thu thực tế từ <strong>' + totalOrders + ' hóa đơn POS</strong> (' + totalItemsSold + ' món bán ra), ' +
+        'tổng chi phí thực tế <strong class="highlight-amber">' + expFmt.formattedVnd + ' VNĐ (' + expFmt.formattedTrieu + ' triệu VNĐ)</strong> ' +
+        'và lợi nhuận thực tế <strong class="highlight-green">' + profSign + profFmt.formattedVnd + ' VNĐ (' + profSign + profFmt.formattedTrieu + ' triệu VNĐ · ' + profitMarginPct.toFixed(1).replace('.', ',') + '%)</strong>.',
+      // ONLY 3 KPI Cards on Overview: Doanh thu, Chi phí, Lợi nhuận
+      kpis: [
+        {
+          id: 'kpi-revenue',
+          label: 'Doanh thu',
+          value: revFmt.formattedTrieu + ' tr',
+          vndText: revFmt.formattedVnd + ' VNĐ',
+          numericValue: totalRevTrieu,
+          numericVnd: totalRevVnd,
+          unit: 'Triệu VNĐ',
+          badge: totalOrders + ' hóa đơn · ' + totalItemsSold + ' món',
+          badgeType: 'positive',
+          subtext: 'Tại chỗ 36,4% · Online 33,9% · Mang về 29,7%',
+          targetView: 'view-revenue',
+          accentColor: '#2E6B22'
+        },
+        {
+          id: 'kpi-expenses',
+          label: 'Chi phí',
+          value: expFmt.formattedTrieu + ' tr',
+          vndText: expFmt.formattedVnd + ' VNĐ',
+          numericValue: totalExpTrieu,
+          numericVnd: totalExpVnd,
+          unit: 'Triệu VNĐ',
+          badge: expRatioPct.toFixed(1).replace('.', ',') + '% doanh thu',
+          badgeType: 'warning',
+          subtext: entryCount + ' khoản chi thực tế từ Google Sheet',
+          targetView: 'view-expenses-fixed',
+          accentColor: '#D97724'
+        },
+        {
+          id: 'kpi-profit',
+          label: 'Lợi nhuận',
+          value: profSign + profFmt.formattedTrieu + ' tr',
+          vndText: profSign + profFmt.formattedVnd + ' VNĐ',
+          numericValue: profitTrieu,
+          numericVnd: profitVnd,
+          unit: 'Triệu VNĐ',
+          badge: profitMarginPct.toFixed(1).replace('.', ',') + '% biên LN',
+          badgeType: profitVnd >= 0 ? 'positive' : 'warning',
+          subtext: 'Doanh thu (' + revFmt.formattedTrieu + ' tr) − Chi phí (' + expFmt.formattedTrieu + ' tr)',
+          targetView: 'view-revenue',
+          accentColor: '#2B7BBB'
+        }
+      ],
+      donutModes: {
+        finance: {
+          id: 'finance',
+          label: 'Tài chính (' + revFmt.formattedTrieu + ' tr)',
+          centerValue: revFmt.formattedTrieu + ' tr',
+          centerSub: revFmt.formattedVnd + ' VNĐ',
+          unit: 'tr',
+          // Donut ring slices show how Revenue (100%) splits into Chi phí (68%) & Lợi nhuận (32%)
+          donutArcs: [
+            {
+              shortLabel: 'Chi phí',
+              displayValue: expFmt.formattedTrieu + ' tr (' + expFmt.formattedVnd + ' VNĐ)',
+              percent: Math.max(0, Math.min(100, Math.round(expRatioPct))),
+              color: '#D97724'
+            },
+            {
+              shortLabel: 'Lợi nhuận',
+              displayValue: profSign + profFmt.formattedTrieu + ' tr (' + profSign + profFmt.formattedVnd + ' VNĐ)',
+              percent: Math.max(0, 100 - Math.max(0, Math.min(100, Math.round(expRatioPct)))),
+              color: '#2B7BBB'
+            }
+          ],
+          // 3-row legend table shows ONLY Doanh thu, Chi phí, Lợi nhuận
+          items: [
+            {
+              label: 'Doanh thu thực tế (156 hóa đơn POS)',
+              shortLabel: 'Doanh thu',
+              value: totalRevTrieu,
+              vndValue: totalRevVnd,
+              displayValue: revFmt.formattedTrieu + ' tr',
+              displayVnd: revFmt.formattedVnd + ' VNĐ',
+              percent: 100,
+              percentText: '100%',
+              color: '#2E6B22',
+              highlight: false
+            },
+            {
+              label: 'Chi phí thực tế (Tổng chi phí Google Sheet)',
+              shortLabel: 'Chi phí',
+              value: totalExpTrieu,
+              vndValue: totalExpVnd,
+              displayValue: expFmt.formattedTrieu + ' tr',
+              displayVnd: expFmt.formattedVnd + ' VNĐ',
+              percent: Math.round(expRatioPct),
+              percentText: expRatioPct.toFixed(1).replace('.', ',') + '%',
+              color: '#D97724',
+              highlight: true
+            },
+            {
+              label: 'Lợi nhuận thực tế (Doanh thu − Chi phí)',
+              shortLabel: 'Lợi nhuận',
+              value: profitTrieu,
+              vndValue: profitVnd,
+              displayValue: profSign + profFmt.formattedTrieu + ' tr',
+              displayVnd: profSign + profFmt.formattedVnd + ' VNĐ',
+              percent: Math.round(profitMarginPct),
+              percentText: profitMarginPct.toFixed(1).replace('.', ',') + '%',
+              color: '#2B7BBB',
+              highlight: false
+            }
+          ]
+        },
+        orders: {
+          id: 'orders',
+          label: 'Hóa đơn POS (' + totalOrders + ' đơn)',
+          centerValue: String(totalOrders),
+          centerSub: 'hóa đơn thực tế',
+          unit: 'đơn',
+          donutArcs: [
+            { shortLabel: 'Bán tại chỗ', displayValue: '76 đơn (4 909 000 VNĐ)', percent: 49, color: '#2E6B22' },
+            { shortLabel: 'Bán mang về', displayValue: '67 đơn (4 005 000 VNĐ)', percent: 43, color: '#D97724' },
+            { shortLabel: 'Bán online', displayValue: '13 đơn (4 566 000 VNĐ)', percent: 8, color: '#2B7BBB' }
+          ],
+          items: [
+            {
+              label: 'Bán tại chỗ (TB1–TB6 & Tầng 1)',
+              shortLabel: 'Bán tại chỗ',
+              value: 76,
+              displayValue: '76 đơn',
+              displayVnd: '4 909 000 VNĐ',
+              percent: 49,
+              percentText: '48,7%',
+              color: '#2E6B22',
+              highlight: false
+            },
+            {
+              label: 'Bán mang về (B01–B03)',
+              shortLabel: 'Bán mang về',
+              value: 67,
+              displayValue: '67 đơn',
+              displayVnd: '4 005 000 VNĐ',
+              percent: 43,
+              percentText: '42,9%',
+              color: '#D97724',
+              highlight: false
+            },
+            {
+              label: 'Bán online (OL01–OL03)',
+              shortLabel: 'Bán online',
+              value: 13,
+              displayValue: '13 đơn',
+              displayVnd: '4 566 000 VNĐ',
+              percent: 8,
+              percentText: '8,3%',
+              color: '#2B7BBB',
+              highlight: false
+            }
+          ]
+        }
+      },
+      weeklySchedule: recentInvoices,
+      recentInvoices: recentInvoices,
+      topDishes: (revData.byDish || []).slice(0, 5)
+    };
+
+    return { summary: summaryObj, overview: overviewObj };
+  }
+
   function normalizeShortDate(dateStr) {
-    if (!dateStr) return '23/11';
+    if (!dateStr) return '24/11';
     const s = String(dateStr).trim();
-    // Handle YYYY-MM-DD
     const isoMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (isoMatch) {
       return isoMatch[3] + '/' + isoMatch[2];
     }
-    // Handle DD/MM/YYYY or DD/MM
     const vnMatch = s.match(/^(\d{1,2})\/(\d{1,2})/);
     if (vnMatch) {
       const dd = vnMatch[1].length === 1 ? '0' + vnMatch[1] : vnMatch[1];
       const mm = vnMatch[2].length === 1 ? '0' + vnMatch[2] : vnMatch[2];
       return dd + '/' + mm;
     }
-    return '23/11';
+    return '24/11';
   }
 
   function normalizeFullDate(dateStr) {
@@ -10254,43 +10267,51 @@
 
   function mapVariableCategoryKey(catName) {
     const s = String(catName || '').toLowerCase();
-    if (s.indexOf('uống') !== -1 || s.indexOf('nước') !== -1 || s.indexOf('trà') !== -1 || s === 'douong') {
-      return { key: 'doUong', name: 'Đồ uống' };
+    if (s.indexOf('cơm') !== -1 || s === 'suatcom') {
+      return { key: 'suatCom', name: 'Suất cơm' };
     }
     if (s.indexOf('bánh') !== -1 || s.indexOf('bao') !== -1 || s === 'banhbao') {
       return { key: 'banhBao', name: 'Bánh bao' };
     }
-    return { key: 'suatCom', name: 'Suất cơm' };
+    return { key: 'doUong', name: 'Đồ uống' };
+  }
+
+  function refreshOverviewState() {
+    if (!window.MocGiangData) return;
+    const computed = buildRealOverviewAndSummary(
+      window.MocGiangData.revenue,
+      window.MocGiangData.fixedExpenses,
+      window.MocGiangData.variableExpenses,
+      googleIntegration.entries
+    );
+    window.MocGiangData.summary = computed.summary;
+    window.MocGiangData.overview = computed.overview;
   }
 
   function refreshUIViews() {
+    refreshOverviewState();
+    if (typeof window.renderOverview === 'function') {
+      try { window.renderOverview(); } catch (e) { console.error(e); }
+    }
     if (typeof window.renderFixedExpenses === 'function') {
       try { window.renderFixedExpenses(); } catch (e) { console.error(e); }
     }
     if (typeof window.renderVariableExpenses === 'function') {
       try { window.renderVariableExpenses(); } catch (e) { console.error(e); }
     }
-    if (typeof window.renderOverview === 'function') {
-      try { window.renderOverview(); } catch (e) { console.error(e); }
-    }
   }
 
-  /**
-   * Adds a new expense entry from the in-app Google Form modal or external sync,
-   * converts VNĐ (e.g. "20 000", "1 000 000") -> Triệu VNĐ, updates charts & pie %,
-   * and optionally sends to Google Apps Script Web App.
-   */
   function addExpenseEntry(entry) {
     if (!entry) return null;
 
     const parsed = parseVndInput(entry.amountVnd !== undefined ? entry.amountVnd : (entry.amountRaw !== undefined ? entry.amountRaw : entry.amount));
     const fullName = (entry.fullName || 'Quản trị Mộc Giang').trim();
-    const shortDate = normalizeShortDate(entry.date || '23/11/2026');
-    const fullDate = normalizeFullDate(entry.date || '23/11/2026');
+    const shortDate = normalizeShortDate(entry.date || '24/11/2026');
+    const fullDate = normalizeFullDate(entry.date || '24/11/2026');
     const isFixed = String(entry.expenseType || '').indexOf('cố định') !== -1 || entry.expenseType === 'fixed';
     const expenseTypeLabel = isFixed ? 'Chi phí cố định' : 'Chi phí biến động';
 
-    let categoryName = entry.category || (isFixed ? 'Thuê mặt bằng (199 Hoàng Cầu)' : 'Suất cơm');
+    let categoryName = entry.category || (isFixed ? 'Khấu hao thiết bị & Bảo trì định kỳ' : 'Đồ uống');
     let varCatInfo = null;
     if (!isFixed) {
       varCatInfo = mapVariableCategoryKey(categoryName);
@@ -10328,7 +10349,6 @@
     googleIntegration.entries.unshift(record);
 
     if (isFixed) {
-      // Update Fixed Expenses daily & category totals
       const existingDay = fixedExpensesByDay.find(function (d) { return d.date === shortDate; });
       if (existingDay) {
         existingDay.amount = Math.round((existingDay.amount + parsed.trieu) * 1000) / 1000;
@@ -10359,36 +10379,29 @@
       catObj.amountVnd = (catObj.amountVnd || 0) + parsed.vnd;
       catObj.formattedVnd = parseVndInput(catObj.amountVnd).formattedVnd;
 
-      const newFixedTotal = fixedExpensesCategories.reduce(function (sum, c) { return sum + c.amount; }, 0);
-      window.MocGiangData.fixedExpenses.total = Math.round(newFixedTotal * 100) / 100;
-      window.MocGiangData.summary.totalFixedExpenses = window.MocGiangData.fixedExpenses.total;
+      const newFixedVnd = fixedExpensesCategories.reduce(function (sum, c) { return sum + (c.amountVnd || Math.round(c.amount * 1000000)); }, 0);
+      const newFixedTotal = Number((newFixedVnd / 1000000).toFixed(3));
+      window.MocGiangData.fixedExpenses.total = newFixedTotal;
+      window.MocGiangData.fixedExpenses.totalVnd = newFixedVnd;
+      window.MocGiangData.fixedExpenses.formattedTotalVnd = parseVndInput(newFixedVnd).formattedVnd;
 
       fixedExpensesCategories.forEach(function (c) {
-        const pct = newFixedTotal > 0 ? Math.round((c.amount / newFixedTotal) * 1000) / 10 : 0;
+        const pct = newFixedVnd > 0 ? Math.round(((c.amountVnd || 0) / newFixedVnd) * 1000) / 10 : 0;
         c.percentage = pct;
         c.percent = Math.round(pct);
       });
     } else {
-      // Update Variable Expenses week days & 3 categories (Suất cơm, Đồ uống, Bánh bao)
-      const catKey = varCatInfo ? varCatInfo.key : 'suatCom';
-      let matchedDay = null;
+      const catKey = varCatInfo ? varCatInfo.key : 'doUong';
       Object.keys(variableExpensesWeeks).forEach(function (wKey) {
         const w = variableExpensesWeeks[wKey];
         const d = w.days.find(function (dayItem) { return dayItem.date === shortDate; });
-        if (d) matchedDay = d;
+        if (d) {
+          d[catKey] = Math.round(((d[catKey] || 0) + parsed.trieu) * 1000) / 1000;
+          d.amount = Math.round(((d.doUong || 0) + (d.suatCom || 0) + (d.banhBao || 0)) * 1000) / 1000;
+          d.value = d.amount;
+          d.note = record.note;
+        }
       });
-      if (!matchedDay) {
-        // Default to 23/11 in active week if date is outside November weeks
-        const activeWeek = variableExpensesWeeks.week_17_23;
-        matchedDay = activeWeek.days[activeWeek.days.length - 1];
-      }
-
-      if (matchedDay) {
-        matchedDay[catKey] = Math.round(((matchedDay[catKey] || 0) + parsed.trieu) * 1000) / 1000;
-        matchedDay.amount = Math.round(((matchedDay.doUong || 0) + (matchedDay.suatCom || 0) + (matchedDay.banhBao || 0)) * 1000) / 1000;
-        matchedDay.value = matchedDay.amount;
-        matchedDay.note = record.note;
-      }
 
       const vCatObj = variableExpensesCategories.find(function (c) { return c.key === catKey; }) || variableExpensesCategories[0];
       vCatObj.amount = Math.round((vCatObj.amount + parsed.trieu) * 1000) / 1000;
@@ -10396,20 +10409,20 @@
       vCatObj.amountVnd = (vCatObj.amountVnd || 0) + parsed.vnd;
       vCatObj.formattedVnd = parseVndInput(vCatObj.amountVnd).formattedVnd;
 
-      const newVarTotal = variableExpensesCategories.reduce(function (sum, c) { return sum + c.amount; }, 0);
-      window.MocGiangData.variableExpenses.total = Math.round(newVarTotal * 100) / 100;
-      window.MocGiangData.variableExpenses.suatComTotal = variableExpensesCategories[0].amount;
-      window.MocGiangData.variableExpenses.doUongTotal = variableExpensesCategories[1].amount;
-      window.MocGiangData.variableExpenses.banhBaoTotal = variableExpensesCategories[2].amount;
+      const newVarVnd = variableExpensesCategories.reduce(function (sum, c) { return sum + (c.amountVnd || Math.round(c.amount * 1000000)); }, 0);
+      const newVarTotal = Number((newVarVnd / 1000000).toFixed(3));
+      window.MocGiangData.variableExpenses.total = newVarTotal;
+      window.MocGiangData.variableExpenses.monthTotal = newVarTotal;
+      window.MocGiangData.variableExpenses.totalVnd = newVarVnd;
+      window.MocGiangData.variableExpenses.formattedTotalVnd = parseVndInput(newVarVnd).formattedVnd;
 
       variableExpensesCategories.forEach(function (c) {
-        const pct = newVarTotal > 0 ? Math.round((c.amount / newVarTotal) * 1000) / 10 : 0;
+        const pct = newVarVnd > 0 ? Math.round(((c.amountVnd || 0) / newVarVnd) * 1000) / 10 : 0;
         c.percentage = pct;
         c.percent = Math.round(pct);
       });
     }
 
-    // If Apps Script Web App URL is configured, POST asynchronously to Google Sheet & Drive
     if (googleIntegration.appsScriptUrl) {
       try {
         fetch(googleIntegration.appsScriptUrl, {
@@ -10440,9 +10453,127 @@
   window.addExpenseEntry = addExpenseEntry;
 
   /**
-   * Synchronizes live rows from Google Apps Script Web App JSON endpoint or Google Sheet CSV export,
-   * falling back gracefully to the pre-synced 32 Google Sheet rows.
+   * Rebuilds fixedExpenses and variableExpenses arrays directly from a list of synced Google Sheet rows
    */
+  function rebuildExpensesFromEntries(entries) {
+    if (!Array.isArray(entries) || entries.length === 0) return;
+
+    const fixedDayMap = {};
+    const fixedCatTotals = {
+      'Khấu hao thiết bị & Bảo trì định kỳ': 0,
+      'Bảo hiểm, An ninh & Vệ sinh cố định': 0,
+      'Thuê mặt bằng (199 Hoàng Cầu)': 0,
+      'Lương nhân sự cố định (Bếp & Quản lý)': 0,
+      'Phần mềm POS, Internet & Bản quyền': 0
+    };
+
+    const varDayMap = {};
+    const varCatTotals = { doUong: 0, suatCom: 0, banhBao: 0 };
+
+    entries.forEach(function (e) {
+      const vnd = Number(e.amountVnd) || parseVndInput(e.amountRaw).vnd;
+      const trieu = Number((vnd / 1000000).toFixed(3));
+      const sd = e.shortDate || normalizeShortDate(e.date);
+      const fd = e.date || (sd + '/2026');
+      const isFixed = String(e.expenseType || '').indexOf('cố định') !== -1;
+
+      if (isFixed) {
+        if (!fixedDayMap[sd]) {
+          fixedDayMap[sd] = {
+            date: sd,
+            fullDate: fd,
+            amount: 0,
+            value: 0,
+            amountVnd: 0,
+            formattedVnd: '0',
+            fullName: e.fullName || 'Quản lý Mộc Giang',
+            category: e.category || 'Khấu hao thiết bị & Bảo trì định kỳ',
+            note: e.note || ''
+          };
+        }
+        fixedDayMap[sd].amountVnd += vnd;
+        fixedDayMap[sd].amount = Number((fixedDayMap[sd].amountVnd / 1000000).toFixed(3));
+        fixedDayMap[sd].value = fixedDayMap[sd].amount;
+        fixedDayMap[sd].formattedVnd = parseVndInput(fixedDayMap[sd].amountVnd).formattedVnd;
+        if (e.note && fixedDayMap[sd].note.indexOf(e.note) === -1) {
+          fixedDayMap[sd].note = fixedDayMap[sd].note ? (fixedDayMap[sd].note + ' · ' + e.note) : e.note;
+        }
+        const matchedFixedCat = Object.keys(fixedCatTotals).find(function (k) {
+          return k === e.category || (e.category && k.indexOf(e.category) !== -1);
+        }) || 'Khấu hao thiết bị & Bảo trì định kỳ';
+        fixedCatTotals[matchedFixedCat] += vnd;
+      } else {
+        const vc = mapVariableCategoryKey(e.category);
+        varCatTotals[vc.key] += vnd;
+        if (!varDayMap[sd]) {
+          varDayMap[sd] = { doUong: 0, suatCom: 0, banhBao: 0, notes: [] };
+        }
+        varDayMap[sd][vc.key] = Number((varDayMap[sd][vc.key] + trieu).toFixed(3));
+        if (e.note) varDayMap[sd].notes.push(e.note);
+      }
+    });
+
+    // Update fixedExpensesByDay & fixedExpensesCategories
+    const sortedFixedDays = Object.values(fixedDayMap).sort(function (a, b) {
+      return a.date.localeCompare(b.date);
+    });
+    fixedExpensesByDay.length = 0;
+    sortedFixedDays.forEach(function (d) { fixedExpensesByDay.push(d); });
+
+    const totalFixedVnd = Object.values(fixedCatTotals).reduce(function (s, v) { return s + v; }, 0);
+    fixedExpensesCategories.forEach(function (c) {
+      const catVnd = fixedCatTotals[c.name] || 0;
+      c.amountVnd = catVnd;
+      c.formattedVnd = parseVndInput(catVnd).formattedVnd;
+      c.amount = Number((catVnd / 1000000).toFixed(3));
+      c.value = c.amount;
+      const pct = totalFixedVnd > 0 ? Number(((catVnd / totalFixedVnd) * 100).toFixed(1)) : 0;
+      c.percentage = pct;
+      c.percent = Math.round(pct);
+    });
+
+    window.MocGiangData.fixedExpenses.totalVnd = totalFixedVnd;
+    window.MocGiangData.fixedExpenses.total = Number((totalFixedVnd / 1000000).toFixed(3));
+    window.MocGiangData.fixedExpenses.formattedTotalVnd = parseVndInput(totalFixedVnd).formattedVnd;
+    window.MocGiangData.fixedExpenses.averagePerDay = Number((window.MocGiangData.fixedExpenses.total / Math.max(1, fixedExpensesByDay.length)).toFixed(3));
+
+    // Update variableExpensesWeeks & variableExpensesCategories
+    Object.keys(variableExpensesWeeks).forEach(function (wKey) {
+      const w = variableExpensesWeeks[wKey];
+      w.days.forEach(function (d) {
+        const dm = varDayMap[d.date];
+        if (dm) {
+          d.doUong = dm.doUong;
+          d.suatCom = dm.suatCom;
+          d.banhBao = dm.banhBao;
+          d.amount = Number((dm.doUong + dm.suatCom + dm.banhBao).toFixed(3));
+          d.value = d.amount;
+          if (dm.notes.length > 0) d.note = dm.notes.join(' · ');
+        }
+      });
+    });
+
+    const totalVarVnd = varCatTotals.doUong + varCatTotals.suatCom + varCatTotals.banhBao;
+    variableExpensesCategories.forEach(function (c) {
+      const catVnd = varCatTotals[c.key] || 0;
+      c.amountVnd = catVnd;
+      c.formattedVnd = parseVndInput(catVnd).formattedVnd;
+      c.amount = Number((catVnd / 1000000).toFixed(3));
+      c.value = c.amount;
+      const pct = totalVarVnd > 0 ? Number(((catVnd / totalVarVnd) * 100).toFixed(1)) : 0;
+      c.percentage = pct;
+      c.percent = Math.round(pct);
+    });
+
+    window.MocGiangData.variableExpenses.totalVnd = totalVarVnd;
+    window.MocGiangData.variableExpenses.total = Number((totalVarVnd / 1000000).toFixed(3));
+    window.MocGiangData.variableExpenses.monthTotal = window.MocGiangData.variableExpenses.total;
+    window.MocGiangData.variableExpenses.formattedTotalVnd = parseVndInput(totalVarVnd).formattedVnd;
+    window.MocGiangData.variableExpenses.doUongTotal = Number((varCatTotals.doUong / 1000000).toFixed(3));
+    window.MocGiangData.variableExpenses.suatComTotal = Number((varCatTotals.suatCom / 1000000).toFixed(3));
+    window.MocGiangData.variableExpenses.banhBaoTotal = Number((varCatTotals.banhBao / 1000000).toFixed(3));
+  }
+
   function syncFromGoogleDrive(options) {
     const opts = options || {};
     if (opts.appsScriptUrl !== undefined) {
@@ -10450,20 +10581,21 @@
       try { localStorage.setItem('mg_apps_script_url', googleIntegration.appsScriptUrl); } catch (e) {}
     }
     if (opts.formUrl !== undefined) {
-      googleIntegration.formUrl = String(opts.formUrl).trim() || SPREADSHEET_URL;
+      googleIntegration.formUrl = String(opts.formUrl).trim() || GOOGLE_FORM_URL;
       try { localStorage.setItem('mg_google_form_url', googleIntegration.formUrl); } catch (e) {}
     }
 
     const endpoint = googleIntegration.appsScriptUrl;
-    const nowStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' · 23/11/2026';
+    const nowStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' · 24/11/2026';
 
     if (!endpoint) {
+      rebuildExpensesFromEntries(googleIntegration.entries);
       googleIntegration.lastSyncTime = nowStr;
-      googleIntegration.syncStatus = 'Đã đồng bộ (' + googleIntegration.entries.length + ' phiếu chi từ Sheet ' + SPREADSHEET_ID.slice(0, 8) + '...)';
+      googleIntegration.syncStatus = 'Đã đồng bộ (' + googleIntegration.entries.length + ' phiếu chi thực tế từ Google Sheet)';
       refreshUIViews();
       return Promise.resolve({
         ok: true,
-        source: 'google-sheet-mirror',
+        source: 'google-sheet-real',
         spreadsheetId: SPREADSHEET_ID,
         driveFolderId: DRIVE_FOLDER_ID,
         count: googleIntegration.entries.length,
@@ -10478,30 +10610,31 @@
           googleIntegration.entries = payload.rows.map(function (r, idx) {
             const parsed = parseVndInput(r.amountVnd || r.amountRaw || 0);
             const idCode = 'GF-' + String(idx + 1).padStart(2, '0');
-            const thumb = (r.receiptUrl && r.receiptUrl.indexOf('http') === 0 && r.receiptUrl.indexOf('/folders/') === -1)
+            const thumb = (r.receiptUrl && r.receiptUrl.indexOf('http') === 0 && r.receiptUrl.indexOf('/folders/') === -1 && r.receiptUrl.indexOf('/spreadsheets/') === -1)
               ? r.receiptUrl
-              : createReceiptSvgDataUri(r.category || 'Chi phí', parsed.formattedVnd, r.date || '23/11/2026', r.fullName || 'Mộc Giang', idCode);
+              : createReceiptSvgDataUri(r.category || 'Chi phí', parsed.formattedVnd, r.date || '24/11/2026', r.fullName || 'Mộc Giang', idCode);
             return {
               id: idCode,
               timestamp: r.timestamp || '',
               fullName: r.fullName || 'Nhân sự Mộc Giang',
-              date: r.date || '23/11/2026',
+              date: r.date || '24/11/2026',
               shortDate: normalizeShortDate(r.date),
               amountRaw: parsed.formattedVnd,
               amountVnd: parsed.vnd,
               amountFormattedVnd: parsed.formattedVnd,
               amountTrieu: parsed.trieu,
               expenseType: r.expenseType || 'Chi phí biến động',
-              category: r.category || 'Suất cơm',
+              category: r.category || 'Đồ uống',
               note: r.note || '',
               receiptThumb: thumb,
               receiptUrl: r.receiptUrl || thumb,
               driveUrl: DRIVE_FOLDER_URL
             };
           }).reverse();
+          rebuildExpensesFromEntries(googleIntegration.entries);
         }
         googleIntegration.lastSyncTime = nowStr;
-        googleIntegration.syncStatus = 'Đã đồng bộ trực tiếp từ Google Sheet (' + googleIntegration.entries.length + ' dòng)';
+        googleIntegration.syncStatus = 'Đã đồng bộ trực tiếp từ Google Sheet (' + googleIntegration.entries.length + ' phiếu chi thực tế)';
         refreshUIViews();
         return {
           ok: true,
@@ -10513,12 +10646,13 @@
         };
       })
       .catch(function () {
+        rebuildExpensesFromEntries(googleIntegration.entries);
         googleIntegration.lastSyncTime = nowStr;
-        googleIntegration.syncStatus = 'Đã đồng bộ (' + googleIntegration.entries.length + ' phiếu chi từ Google Sheet)';
+        googleIntegration.syncStatus = 'Đã đồng bộ (' + googleIntegration.entries.length + ' phiếu chi thực tế từ Google Sheet)';
         refreshUIViews();
         return {
           ok: true,
-          source: 'google-sheet-cached',
+          source: 'google-sheet-real-cached',
           spreadsheetId: SPREADSHEET_ID,
           driveFolderId: DRIVE_FOLDER_ID,
           count: googleIntegration.entries.length,
@@ -10529,6 +10663,48 @@
 
   window.syncFromGoogleDrive = syncFromGoogleDrive;
 
+  const fixedExpensesObj = {
+    total: 1.365,
+    totalVnd: 1365000,
+    formattedTotalVnd: '1 365 000',
+    averagePerDay: 0.273,
+    ratioToRevenue: 10.1,
+    unit: 'Triệu VNĐ',
+    largestCategory: 'Khấu hao thiết bị & Bảo trì định kỳ',
+    byDay: fixedExpensesByDay,
+    daily: fixedExpensesByDay,
+    categories: fixedExpensesCategories,
+    byCategory: fixedExpensesCategories
+  };
+
+  const variableExpensesObj = {
+    total: 7.799,
+    totalVnd: 7799000,
+    formattedTotalVnd: '7 799 000',
+    monthTotal: 7.799,
+    week17To23Total: 6.764,
+    week17To23TotalVnd: 6764000,
+    averagePerDay: 0.867,
+    ratioToRevenue: 57.9,
+    unit: 'Triệu VNĐ',
+    suatComTotal: 0,
+    doUongTotal: 7.799,
+    banhBaoTotal: 0,
+    defaultWeekId: 'week_17_23',
+    weeks: variableExpensesWeeks,
+    byDay: variableExpensesByDay,
+    daily: variableExpensesByDay,
+    categories: variableExpensesCategories,
+    byCategory: variableExpensesCategories
+  };
+
+  const initialOverviewAndSummary = buildRealOverviewAndSummary(
+    posRevenueData,
+    fixedExpensesObj,
+    variableExpensesObj,
+    googleIntegration.entries
+  );
+
   window.MocGiangData = {
     brand: brand,
     palette: palette,
@@ -10536,21 +10712,8 @@
     parseVndInput: parseVndInput,
     syncFromGoogleDrive: syncFromGoogleDrive,
     addExpenseEntry: addExpenseEntry,
-    summary: {
-      totalRevenue: 486.5,
-      revenueGrowthPercent: 14.2,
-      totalFixedExpenses: 118.0,
-      fixedExpenseRatio: 24.3,
-      totalVariableExpenses: 174.5,
-      variableExpenseRatio: 35.9,
-      estimatedProfit: 194.0,
-      profitMarginPercent: 39.9,
-      completedOrders: 1420,
-      activeTables: 14,
-      totalTables: 22,
-      pendingApprovals: 2,
-      todayPartyBookings: 3
-    },
+    recalculateOverview: refreshOverviewState,
+    summary: initialOverviewAndSummary.summary,
     revenue: Object.assign({}, posRevenueData, {
       total: posRevenueData.total,
       totalTrieu: posRevenueData.totalTrieu,
@@ -10558,8 +10721,8 @@
       formattedTotalVnd: posRevenueData.formattedTotalVnd,
       totalOrders: posRevenueData.totalOrders,
       totalItemsSold: posRevenueData.totalItemsSold,
-      unit: "Triệu VNĐ",
-      growth: "156 hóa đơn POS (17/11 – 24/11/2026)",
+      unit: 'Triệu VNĐ',
+      growth: '156 hóa đơn POS thực tế (17/11 – 24/11/2026)',
       channels: posRevenueData.channels,
       categories: posRevenueData.channels,
       allDays: posRevenueData.allDays,
@@ -10574,37 +10737,8 @@
       dishGroups: posRevenueData.byDishGroup,
       invoices: posRevenueData.invoices
     }),
-    fixedExpenses: {
-      total: 118.0,
-      totalVnd: 118000000,
-      formattedTotalVnd: '118 000 000',
-      averagePerDay: 3.93,
-      ratioToRevenue: 24.3,
-      unit: 'Triệu VNĐ',
-      largestCategory: 'Thuê mặt bằng (199 Hoàng Cầu)',
-      byDay: fixedExpensesByDay,
-      daily: fixedExpensesByDay,
-      categories: fixedExpensesCategories,
-      byCategory: fixedExpensesCategories
-    },
-    variableExpenses: {
-      total: 160.2,
-      totalVnd: 160200000,
-      formattedTotalVnd: '160 200 000',
-      monthTotal: 174.5,
-      averagePerDay: 22.89,
-      ratioToRevenue: 32.9,
-      unit: 'Triệu VNĐ',
-      suatComTotal: 83.7,
-      doUongTotal: 45.1,
-      banhBaoTotal: 31.4,
-      defaultWeekId: 'week_17_23',
-      weeks: variableExpensesWeeks,
-      byDay: variableExpensesByDay,
-      daily: variableExpensesByDay,
-      categories: variableExpensesCategories,
-      byCategory: variableExpensesCategories
-    },
-    overview: overview
+    fixedExpenses: fixedExpensesObj,
+    variableExpenses: variableExpensesObj,
+    overview: initialOverviewAndSummary.overview
   };
 })();

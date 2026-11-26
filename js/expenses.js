@@ -249,7 +249,7 @@
   };
 
   const DEFAULT_EXPENSES_DATA = {
-    monthlyRevenue: 486.5,
+    monthlyRevenue: 13.48,
 
     fixed: {
       totalMonth: 118.0,
@@ -804,8 +804,8 @@
   function getNormalizedData() {
     const ext = window.MocGiangData || {};
     const monthlyRevenue =
-      (ext.summary && Number(ext.summary.totalRevenue)) ||
       (ext.revenue && Number(ext.revenue.total)) ||
+      (ext.summary && Number(ext.summary.totalRevenue)) ||
       Number(ext.monthlyRevenue) ||
       DEFAULT_EXPENSES_DATA.monthlyRevenue;
 
@@ -813,7 +813,7 @@
     const fixed = JSON.parse(JSON.stringify(DEFAULT_EXPENSES_DATA.fixed));
     const extFixed = ext.fixedExpenses;
     if (extFixed) {
-      if (Array.isArray(extFixed.byDay || extFixed.daily) && (extFixed.byDay || extFixed.daily).length > 0) {
+      if (Array.isArray(extFixed.byDay || extFixed.daily)) {
         const rawDaily = extFixed.byDay || extFixed.daily;
         fixed.dailyRecords = rawDaily.map((r, i) => {
           const amt = Number(r.amount ?? r.value ?? 0);
@@ -840,7 +840,7 @@
       }
 
       if (Array.isArray(extFixed.categories) && extFixed.categories.length > 0) {
-        const totalCatAmt = extFixed.categories.reduce((s, c) => s + (Number(c.amount ?? c.value) || 0), 0) || 118;
+        const totalCatAmt = extFixed.categories.reduce((s, c) => s + (Number(c.amount ?? c.value) || 0), 0) || 1;
         fixed.categories = extFixed.categories.map((c, idx) => {
           const amt = Number(c.amount ?? c.value ?? 0);
           const pct =
@@ -856,7 +856,7 @@
             shortName: c.shortName || fallbackCat.shortName,
             percent: Math.round(pct * 10) / 10,
             amount: amt,
-            vndAmount: Number(c.vndAmount ?? Math.round(amt * 1000000)),
+            vndAmount: Number(c.vndAmount ?? c.amountVnd ?? Math.round(amt * 1000000)),
             color: c.color || fallbackCat.color,
             note: c.note || c.description || fallbackCat.note
           };
@@ -864,55 +864,78 @@
       }
 
       const sumDaily = fixed.dailyRecords.reduce((s, r) => s + (Number(r.amount) || 0), 0);
-      fixed.totalMonth = Number(extFixed.total) || sumDaily || 118.0;
+      fixed.totalMonth = extFixed.total !== undefined ? Number(extFixed.total) : sumDaily;
     }
 
     // 2. Normalize Variable Expenses (reading live from window.MocGiangData.variableExpenses if present)
-    const variableWeeks = JSON.parse(JSON.stringify(DEFAULT_EXPENSES_DATA.variableWeeks));
+    let variableWeeks = JSON.parse(JSON.stringify(DEFAULT_EXPENSES_DATA.variableWeeks));
     const extVar = ext.variableExpenses;
-    if (extVar) {
-      if (extVar.weeks && typeof extVar.weeks === 'object') {
-        Object.keys(extVar.weeks).forEach((wkKey) => {
-          const wk = extVar.weeks[wkKey];
-          if (wk && Array.isArray(wk.days || wk.items) && (wk.days || wk.items).length > 0) {
-            const rawDays = wk.days || wk.items;
-            const maxDayBar = Math.max(
-              20,
-              ...rawDays.map((d) =>
-                Math.max(
-                  Number(d.suatCom ?? d.rice ?? 0),
-                  Number(d.doUong ?? d.drink ?? 0),
-                  Number(d.banhBao ?? d.bun ?? 0)
-                )
+    if (extVar && extVar.weeks && typeof extVar.weeks === 'object' && Object.keys(extVar.weeks).length > 0) {
+      const liveWeeks = {};
+      Object.keys(extVar.weeks).forEach((wkKey) => {
+        const wk = extVar.weeks[wkKey];
+        if (wk && Array.isArray(wk.days || wk.items) && (wk.days || wk.items).length > 0) {
+          const rawDays = wk.days || wk.items;
+          const maxDayBar = Math.max(
+            0.5,
+            ...rawDays.map((d) =>
+              Math.max(
+                Number(d.suatCom ?? d.rice ?? 0),
+                Number(d.doUong ?? d.drink ?? 0),
+                Number(d.banhBao ?? d.bun ?? 0)
               )
-            );
-            const computedYMax = Math.ceil((maxDayBar * 1.12) / 5) * 5;
-            variableWeeks[wkKey] = {
-              id: wkKey,
-              label: wk.label || (variableWeeks[wkKey] && variableWeeks[wkKey].label) || wkKey,
-              fullLabel: wk.fullLabel || wk.label || wkKey,
-              xAxisTitle: wk.xAxisTitle || `Trục X: Ngày (${wk.label || '7 ngày'})`,
-              yMax: computedYMax,
-              yStep: Math.max(5, Math.round(computedYMax / 4)),
-              days: rawDays.map((d, i) => ({
-                date: d.date,
-                fullDate: d.fullDate || `${d.date}/2026`,
-                dayLabel: d.dayLabel || '',
-                code: d.code || `CPBĐ-${String(d.date || i).replace('/', '')}`,
-                suatCom: Number(d.suatCom ?? d.rice ?? d.meals ?? 0),
-                doUong: Number(d.doUong ?? d.drink ?? d.drinks ?? 0),
-                banhBao: Number(d.banhBao ?? d.bun ?? d.buns ?? 0),
-                note: d.note || 'Chi phí biến động: Suất cơm, Đồ uống & Bánh bao (Google Form/Sheet)',
-                supplier: d.supplier || 'HTX Rau sạch & Thực phẩm Mộc'
-              }))
-            };
+            )
+          );
+          let yStep = 5;
+          let computedYMax = 20;
+          if (maxDayBar <= 2) {
+            yStep = 0.5;
+            computedYMax = Math.max(2, Math.ceil((maxDayBar * 1.15) / 0.5) * 0.5);
+          } else if (maxDayBar <= 5) {
+            yStep = 1;
+            computedYMax = Math.max(4, Math.ceil(maxDayBar * 1.15));
+          } else if (maxDayBar <= 12) {
+            yStep = 2;
+            computedYMax = Math.ceil((maxDayBar * 1.15) / 2) * 2;
+          } else {
+            yStep = 5;
+            computedYMax = Math.ceil((maxDayBar * 1.12) / 5) * 5;
           }
-        });
+          liveWeeks[wkKey] = {
+            id: wkKey,
+            label: wk.label || (variableWeeks[wkKey] && variableWeeks[wkKey].label) || wkKey,
+            fullLabel: wk.fullLabel || wk.label || wkKey,
+            xAxisTitle: wk.xAxisTitle || `Trục X: Ngày (${wk.label || '7 ngày'})`,
+            yMax: computedYMax,
+            yStep: yStep,
+            days: rawDays.map((d, i) => ({
+              date: d.date,
+              fullDate: d.fullDate || `${d.date}/2026`,
+              dayLabel: d.dayLabel || '',
+              code: d.code || `CPBĐ-${String(d.date || i).replace('/', '')}`,
+              suatCom: Number(d.suatCom ?? d.rice ?? d.meals ?? 0),
+              doUong: Number(d.doUong ?? d.drink ?? d.drinks ?? 0),
+              banhBao: Number(d.banhBao ?? d.bun ?? d.buns ?? 0),
+              note: d.note || 'Chi phí biến động thực tế từ Google Sheet',
+              supplier: d.supplier || 'Dữ liệu thực tế Google Sheet Mộc Giang'
+            }))
+          };
+        }
+      });
+      if (Object.keys(liveWeeks).length > 0) {
+        variableWeeks = liveWeeks;
       }
     }
 
+    if (!variableWeeks[state.variableWeek]) {
+      const defWk = (extVar && extVar.defaultWeekId && variableWeeks[extVar.defaultWeekId])
+        ? extVar.defaultWeekId
+        : Object.keys(variableWeeks)[0];
+      if (defWk) state.variableWeek = defWk;
+    }
+
     return {
-      monthlyRevenue: monthlyRevenue > 0 ? monthlyRevenue : 486.5,
+      monthlyRevenue: monthlyRevenue > 0 ? monthlyRevenue : 13.48,
       fixed,
       variableWeeks,
       submissions: getLiveSubmissions(),
@@ -3216,13 +3239,17 @@
     const recordsForChart = getFilteredFixedRecords(fixed);
 
     const periodTotal = recordsForChart.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
-    const totalMonth = fixed.totalMonth || 118.0;
+    const totalMonth = fixed.totalMonth !== undefined ? Number(fixed.totalMonth) : periodTotal;
     const totalMonthVnd = formatVndSpace(Math.round(totalMonth * 1000000));
-    const avgPerDay = totalMonth / (fixed.daysInMonth || 30);
+    const avgPerDay = totalMonth / Math.max(fixed.daysInMonth || 30, 1);
     const largestCat =
       fixed.categories.slice().sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))[0] ||
       fixed.categories[0];
-    const revenueRatio = ((totalMonth / data.monthlyRevenue) * 100).toFixed(1);
+    const peakRecord =
+      recordsForChart.slice().sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0))[0] || null;
+    const maxFixedBarVal = peakRecord ? Number(peakRecord.amount) || 1 : 10;
+    const fixedYStep = maxFixedBarVal <= 5 ? 1 : maxFixedBarVal <= 15 ? 2 : maxFixedBarVal <= 30 ? 5 : 10;
+    const revenueRatio = data.monthlyRevenue > 0 ? ((totalMonth / data.monthlyRevenue) * 100).toFixed(1) : '0.0';
 
     const catColorMap = {};
     fixed.categories.forEach((c) => {
@@ -3361,8 +3388,8 @@
 
             <div class="mg-exp-barchart-wrap">
               ${buildSingleBarChartSVG(recordsForChart, {
-                yMaxForced: 50,
-                yStep: 10,
+                yMaxForced: null,
+                yStep: fixedYStep,
                 barColor: '#3D1F0D',
                 barAccentColor: '#2E6B22',
                 highlightCatColorMap: catColorMap,
@@ -3371,7 +3398,11 @@
             </div>
 
             <div class="mg-exp-chart-footer">
-              <span>💡 Đỉnh chi phí cố định vào ngày <strong>01/11 (49,56 tr = 49 560 000 VNĐ — Thuê mặt bằng)</strong>.</span>
+              <span>${
+                peakRecord
+                  ? `💡 Khoản chi cố định cao nhất kỳ vào ngày <strong>${peakRecord.date} (${formatMillionSmart(peakRecord.amount, true)} tr = ${formatVndSpace(peakRecord.vndAmount || Math.round(peakRecord.amount * 1000000))} VNĐ — ${peakRecord.categoryName})</strong>.`
+                  : '💡 Dữ liệu chi phí cố định thực tế đồng bộ từ Google Sheet.'
+              }</span>
               <span>Tổng kỳ hiển thị: <strong>${formatMillionSmart(periodTotal, true)} Triệu VNĐ</strong></span>
             </div>
           </div>
@@ -4190,6 +4221,9 @@
           .then(() => {
             window.renderFixedExpenses();
             window.renderVariableExpenses();
+            if (typeof window.renderOverview === 'function') {
+              window.renderOverview();
+            }
           })
           .catch(() => {});
       }
