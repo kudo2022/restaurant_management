@@ -23,6 +23,8 @@
 
 var SPREADSHEET_ID = '14OH_xC4muiSAAhK67nVzmJYltOpjemyLrvyPf5yLAtE';
 var FOLDER_ID = '1evvUqayKJ3MZAs4xjqg6WQPLHEzRvpv2';
+var FORM_ID = '1wPU5OScA-S7s49lo1dURjr93NizlOyddVSnm23SERcc';
+var FORM_RESPONSES_SHEET = 'Form Responses 1';
 var SHEET_NAME = 'Sheet1';
 
 var FIXED_CATEGORIES = [
@@ -171,7 +173,9 @@ function setupMocGiangExpenseForm() {
 function doGet(e) {
   try {
     var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+    var formSheet = ss.getSheetByName(FORM_RESPONSES_SHEET);
+    var sheet = (formSheet && formSheet.getLastRow() > 1) ? formSheet : (ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0]);
+    var isFormTab = (sheet.getName() === FORM_RESPONSES_SHEET);
     var values = sheet.getDataRange().getDisplayValues();
     var headers = values.length > 0 ? values[0] : [];
     var rows = [];
@@ -183,7 +187,9 @@ function doGet(e) {
       var parsedAmount = parseVndAmount(r[3]);
       var expenseType = (r[5] || '').trim();
       var fixedCat = (r[6] || '').trim();
-      var varCat = (r[7] || '').trim();
+      var varCat = isFormTab ? (r[8] || '').trim() : (r[7] || '').trim();
+      var noteVal = isFormTab ? ((r[7] || r[9] || '').trim()) : (r[8] || '').trim();
+      var receiptLink = (isFormTab && r[10]) ? r[10] : (r[4] || '');
       var category = expenseType === 'Chi phí cố định' ? fixedCat : (varCat || fixedCat);
 
       rows.push({
@@ -195,12 +201,12 @@ function doGet(e) {
         amountVnd: parsedAmount.vnd,
         amountFormattedVnd: parsedAmount.formattedVnd,
         amountTrieu: parsedAmount.trieu,
-        receiptUrl: r[4] || '',
+        receiptUrl: receiptLink,
         expenseType: expenseType,
         fixedCategory: fixedCat,
         variableCategory: varCat,
         category: category,
-        note: r[8] || ''
+        note: noteVal
       });
     }
 
@@ -208,6 +214,7 @@ function doGet(e) {
       status: 'ok',
       spreadsheetId: SPREADSHEET_ID,
       driveFolderId: FOLDER_ID,
+      formId: FORM_ID,
       sheetName: sheet.getName(),
       headers: headers,
       count: rows.length,
