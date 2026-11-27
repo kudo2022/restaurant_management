@@ -12,7 +12,7 @@
  *   2. Chọn Tiện ích mở rộng (Extensions) -> Apps Script.
  *   3. Dán toàn bộ nội dung file Code.gs này vào trình soạn thảo và bấm Lưu (Ctrl+S).
  *   4. Chọn hàm `setupMocGiangExpenseForm` trên thanh công cụ và bấm "Chạy" (Run)
- *      để tự động tạo Google Form rẽ nhánh 3 phần liên kết trực tiếp với Google Sheet này.
+ *      để tự động tạo Google Form 1 phần với 9 loại chi phí liên kết trực tiếp với Google Sheet này.
  *   5. Bấm "Triển khai" (Deploy) -> "Tùy chọn triển khai mới" (New deployment) ->
  *      Chọn loại "Ứng dụng web" (Web app):
  *        - Thực thi dưới dạng (Execute as): Tôi (Me)
@@ -24,21 +24,19 @@
 var SPREADSHEET_ID = '14OH_xC4muiSAAhK67nVzmJYltOpjemyLrvyPf5yLAtE';
 var FOLDER_ID = '1evvUqayKJ3MZAs4xjqg6WQPLHEzRvpv2';
 var FORM_ID = '1wPU5OScA-S7s49lo1dURjr93NizlOyddVSnm23SERcc';
-var FORM_RESPONSES_SHEET = 'Form Responses 1';
 var SHEET_NAME = 'Sheet1';
+var FORM_RESPONSES_SHEET = 'Form Responses 1';
 
-var FIXED_CATEGORIES = [
-  'Thuê mặt bằng (199 Hoàng Cầu)',
-  'Lương nhân sự cố định (Bếp & Quản lý)',
-  'Khấu hao thiết bị & Bảo trì định kỳ',
-  'Phần mềm POS, Internet & Bản quyền',
-  'Bảo hiểm, An ninh & Vệ sinh cố định'
-];
-
-var VARIABLE_CATEGORIES = [
-  'Suất cơm',
-  'Đồ uống',
-  'Bánh bao'
+var EXPENSE_CATEGORIES = [
+  'Chi phí nguyên vật liệu đầu vào',
+  'Chi phí nhân công',
+  'Chi phí dụng cụ',
+  'Chi phí điện nước',
+  'Các dịch vụ khác',
+  'Chi phí ship',
+  'Chi phí vận hành',
+  'Chi phí thuê mặt bằng',
+  'Chi phí tài sản khấu hao'
 ];
 
 /**
@@ -62,7 +60,7 @@ function parseVndAmount(raw) {
 }
 
 /**
- * 1. TỰ ĐỘNG TẠO GOOGLE FORM RẼ NHÁNH (3 SECTIONS) & LIÊN KẾT VỚI GOOGLE SHEET
+ * 1. TỰ ĐỘNG TẠO GOOGLE FORM THỐNG NHẤT (9 LOẠI CHI PHÍ) & LIÊN KẾT VỚI GOOGLE SHEET
  */
 function setupMocGiangExpenseForm() {
   var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -71,15 +69,14 @@ function setupMocGiangExpenseForm() {
   form.setDescription(
     'Biểu mẫu nhập chi phí nội bộ Nhà hàng Mộc Giang (199 Hoàng Cầu, Đống Đa, Hà Nội).\n' +
     '• Đơn vị nhập số tiền: VNĐ (ví dụ: 20 000 hoặc 1 000 000 hoặc 9 800 000).\n' +
-    '• Hệ thống Dashboard tự động quy đổi sang Triệu VNĐ (ví dụ: 1 000 000 VNĐ -> 1,00 Triệu VNĐ; 20 000 VNĐ -> 0,02 Triệu VNĐ) để vẽ biểu đồ cột và biểu đồ tròn %.\n' +
+    '• Hệ thống Dashboard tự động quy đổi sang Triệu VNĐ để vẽ biểu đồ cột và biểu đồ tròn % theo 9 loại chi phí.\n' +
     '• Thư mục Google Drive lưu ảnh chụp minh chứng: https://drive.google.com/drive/folders/' + FOLDER_ID
   );
   form.setConfirmationMessage('Đã ghi nhận phiếu chi vào hệ thống Google Sheet & Dashboard Nhà hàng Mộc Giang!');
 
-  // --- SECTION 1: THÔNG TIN CHUNG ---
   var itemFullName = form.addTextItem();
   itemFullName.setTitle('Họ và tên')
-    .setHelpText('Nhập họ và tên người lập phiếu / người chi (ví dụ: Nguyễn Minh Quản Lý, Lê Văn Bếp Trưởng)')
+    .setHelpText('Nhập họ và tên người lập phiếu / người chi (ví dụ: Quản lý Mộc Giang, Quầy Nước Mộc Giang)')
     .setRequired(true);
 
   var itemDate = form.addDateItem();
@@ -101,54 +98,20 @@ function setupMocGiangExpenseForm() {
   var itemReceipt = form.addTextItem();
   itemReceipt.setTitle('Ảnh chụp minh chứng')
     .setHelpText(
-      'Dán link ảnh minh chứng hoặc tải ảnh vào thư mục Drive Mộc Giang: https://drive.google.com/drive/folders/' + FOLDER_ID +
-      ' (Lưu ý: Bạn cũng có thể mở Google Form trong chế độ chỉnh sửa để đổi câu hỏi này sang loại "Tải tệp lên / File Upload" hoặc tải ảnh trực tiếp ngay trên Dashboard Mộc Giang).'
+      'Dán link ảnh minh chứng hoặc tải ảnh vào thư mục Drive Mộc Giang: https://drive.google.com/drive/folders/' + FOLDER_ID
     )
     .setRequired(false);
 
-  var itemExpenseType = form.addMultipleChoiceItem();
-  itemExpenseType.setTitle('Phân loại chi phí')
-    .setHelpText('Chọn loại chi phí để chuyển tới danh mục tương ứng')
+  var itemCategory = form.addMultipleChoiceItem();
+  itemCategory.setTitle('Loại chi phí')
+    .setHelpText('Chọn 1 trong 9 loại chi phí của Nhà hàng Mộc Giang')
+    .setChoiceValues(EXPENSE_CATEGORIES)
     .setRequired(true);
 
-  // --- SECTION 2: CHI PHÍ CỐ ĐỊNH ---
-  var sectionFixed = form.addPageBreakItem();
-  sectionFixed.setTitle('Phần 2: Danh mục Chi phí cố định')
-    .setHelpText('Chọn 1 trong 5 danh mục chi phí cố định của Nhà hàng Mộc Giang');
-
-  var itemFixedCategory = form.addMultipleChoiceItem();
-  itemFixedCategory.setTitle('Danh mục chi phí cố định')
-    .setChoiceValues(FIXED_CATEGORIES)
-    .setRequired(true);
-
-  var itemFixedNote = form.addParagraphTextItem();
-  itemFixedNote.setTitle('Ghi chú chi phí cố định (nếu có)')
+  var itemNote = form.addParagraphTextItem();
+  itemNote.setTitle('Ghi chú (nếu có)')
     .setRequired(false);
 
-  // --- SECTION 3: CHI PHÍ BIẾN ĐỘNG ---
-  var sectionVariable = form.addPageBreakItem();
-  sectionVariable.setTitle('Phần 3: Danh mục Chi phí biến động')
-    .setHelpText('Chọn 1 trong 3 danh mục chi phí biến động (Suất cơm, Đồ uống, Bánh bao)');
-
-  var itemVariableCategory = form.addMultipleChoiceItem();
-  itemVariableCategory.setTitle('Danh mục chi phí biến động')
-    .setChoiceValues(VARIABLE_CATEGORIES)
-    .setRequired(true);
-
-  var itemVariableNote = form.addParagraphTextItem();
-  itemVariableNote.setTitle('Ghi chú chi phí biến động (nếu có)')
-    .setRequired(false);
-
-  // Cấu hình rẽ nhánh (Branching) và kết thúc biểu mẫu (SUBMIT)
-  sectionFixed.setGoToPage(FormApp.PageNavigationType.SUBMIT);
-  sectionVariable.setGoToPage(FormApp.PageNavigationType.SUBMIT);
-
-  itemExpenseType.setChoices([
-    itemExpenseType.createChoice('Chi phí cố định', sectionFixed),
-    itemExpenseType.createChoice('Chi phí biến động', sectionVariable)
-  ]);
-
-  // Liên kết Form với Google Sheet
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
 
   Logger.log('=== TẠO GOOGLE FORM MỘC GIANG THÀNH CÔNG ===');
@@ -173,9 +136,7 @@ function setupMocGiangExpenseForm() {
 function doGet(e) {
   try {
     var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    var formSheet = ss.getSheetByName(FORM_RESPONSES_SHEET);
-    var sheet = (formSheet && formSheet.getLastRow() > 1) ? formSheet : (ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0]);
-    var isFormTab = (sheet.getName() === FORM_RESPONSES_SHEET);
+    var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheetByName(FORM_RESPONSES_SHEET) || ss.getSheets()[0];
     var values = sheet.getDataRange().getDisplayValues();
     var headers = values.length > 0 ? values[0] : [];
     var rows = [];
@@ -185,12 +146,17 @@ function doGet(e) {
       if (!r || (!r[1] && !r[2] && !r[3])) continue;
 
       var parsedAmount = parseVndAmount(r[3]);
-      var expenseType = (r[5] || '').trim();
-      var fixedCat = (r[6] || '').trim();
-      var varCat = isFormTab ? (r[8] || '').trim() : (r[7] || '').trim();
-      var noteVal = isFormTab ? ((r[7] || r[9] || '').trim()) : (r[8] || '').trim();
-      var receiptLink = (isFormTab && r[10]) ? r[10] : (r[4] || '');
-      var category = expenseType === 'Chi phí cố định' ? fixedCat : (varCat || fixedCat);
+      var category = (r[5] || '').trim();
+      var noteVal = (r[6] || '').trim();
+
+      // Hỗ trợ đọc tương thích nếu dữ liệu cũ nằm ở các cột mở rộng
+      if (category === 'Chi phí cố định' && r[6]) {
+        category = String(r[6]).trim();
+        noteVal = (r[7] || r[8] || '').trim();
+      } else if (category === 'Chi phí biến động' && (r[7] || r[8])) {
+        category = String(r[7] || r[8]).trim();
+        noteVal = (r[9] || r[8] || '').trim();
+      }
 
       rows.push({
         rowNumber: i + 1,
@@ -201,10 +167,7 @@ function doGet(e) {
         amountVnd: parsedAmount.vnd,
         amountFormattedVnd: parsedAmount.formattedVnd,
         amountTrieu: parsedAmount.trieu,
-        receiptUrl: receiptLink,
-        expenseType: expenseType,
-        fixedCategory: fixedCat,
-        variableCategory: varCat,
+        receiptUrl: r[4] || '',
         category: category,
         note: noteVal
       });
@@ -214,7 +177,6 @@ function doGet(e) {
       status: 'ok',
       spreadsheetId: SPREADSHEET_ID,
       driveFolderId: FOLDER_ID,
-      formId: FORM_ID,
       sheetName: sheet.getName(),
       headers: headers,
       count: rows.length,
@@ -243,13 +205,10 @@ function doPost(e) {
     var fullName = data.fullName || 'Quản trị Mộc Giang';
     var dateStr = data.date || Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy');
     var parsedAmount = parseVndAmount(data.amountVnd || data.amountRaw || data.amount || 0);
-    var expenseType = data.expenseType || 'Chi phí biến động';
-    var fixedCategory = expenseType === 'Chi phí cố định' ? (data.category || data.fixedCategory || '') : '';
-    var variableCategory = expenseType === 'Chi phí biến động' ? (data.category || data.variableCategory || '') : '';
+    var category = data.category || 'Chi phí nguyên vật liệu đầu vào';
     var note = data.note || '';
     var receiptUrl = data.receiptUrl || '';
 
-    // Nếu người dùng tải ảnh chụp minh chứng dạng Base64 lên từ Website:
     if (data.imageBase64) {
       var folder = DriveApp.getFolderById(FOLDER_ID);
       var cleanBase64 = String(data.imageBase64).replace(/^data:[^;]+;base64,/, '');
@@ -259,9 +218,7 @@ function doPost(e) {
       var file = folder.createFile(blob);
       try {
         file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      } catch (shareErr) {
-        // Bỏ qua nếu chính sách Google Workspace hạn chế chia sẻ công khai
-      }
+      } catch (shareErr) {}
       receiptUrl = file.getUrl();
     }
 
@@ -275,9 +232,7 @@ function doPost(e) {
       dateStr,
       parsedAmount.formattedVnd,
       receiptUrl,
-      expenseType,
-      fixedCategory,
-      variableCategory,
+      category,
       note
     ]);
 
@@ -290,8 +245,7 @@ function doPost(e) {
       amountFormattedVnd: parsedAmount.formattedVnd,
       amountTrieu: parsedAmount.trieu,
       receiptUrl: receiptUrl,
-      expenseType: expenseType,
-      category: fixedCategory || variableCategory,
+      category: category,
       note: note
     })).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {

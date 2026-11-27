@@ -45,7 +45,7 @@
           Quản lý công việc nhà hàng, gọn trong một nơi
         </h1>
         <p class="login-hero-subtext">
-          Hệ thống quản trị vận hành, theo dõi doanh thu đa kênh và kiểm soát chi phí cố định — biến động theo thời gian thực dành riêng cho Nhà hàng Mộc Giang.
+          Hệ thống quản trị vận hành, theo dõi doanh thu đa kênh và kiểm soát chi phí vận hành theo thời gian thực dành riêng cho Nhà hàng Mộc Giang.
         </p>
 
         <div class="login-feature-grid">
@@ -75,11 +75,11 @@
           <div class="login-feature-item">
             <span class="login-feature-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
             </span>
-            <span>Chi phí cố định</span>
+            <span>Quản lý chi phí</span>
           </div>
 
           <div class="login-feature-item">
@@ -88,7 +88,7 @@
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
               </svg>
             </span>
-            <span>Chi phí biến động</span>
+            <span>Lợi nhuận &amp; Hiệu quả</span>
           </div>
         </div>
       </div>
@@ -245,7 +245,7 @@
        Matches Reference Screenshot 3 with ONLY 3 Main Sections:
        1. Tổng quan
        2. Doanh thu
-       3. Chi phí -> (Chi phí cố định, Chi phí biến động)
+       3. Chi phí
        ======================================================================== -->
   <div id="dashboard-screen" class="screen-container hidden">
     <!-- Left Sidebar (Deep Warm Wood Brown #3D1F0D) -->
@@ -334,50 +334,22 @@
             </div>
           </div>
 
-          <!-- 3. CHI PHÍ (Expandable Parent with 2 Sub-sections) -->
-          <div class="nav-group expanded" id="nav-group-expenses">
-            <button
-              type="button"
-              id="nav-expenses"
-              class="nav-item"
-              aria-expanded="true"
-              onclick="window.handleExpensesMenuClick()"
-            >
-              <span class="nav-item-left">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                  <line x1="2" y1="10" x2="22" y2="10"></line>
-                </svg>
-                <span>Chi phí</span>
-              </span>
-              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+          <!-- 3. CHI PHÍ (Single Unified Tab) -->
+          <button
+            type="button"
+            id="nav-expenses"
+            class="nav-item"
+            data-target="view-expenses"
+            onclick="window.switchView('view-expenses')"
+          >
+            <span class="nav-item-left">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
-            </button>
-
-            <div class="nav-submenu" id="submenu-expenses">
-              <button
-                type="button"
-                id="nav-expenses-fixed"
-                class="nav-subitem"
-                data-target="view-expenses-fixed"
-                onclick="window.switchView('view-expenses-fixed')"
-              >
-                <span class="nav-subitem-dot"></span>
-                <span>Chi phí cố định</span>
-              </button>
-              <button
-                type="button"
-                id="nav-expenses-variable"
-                class="nav-subitem"
-                data-target="view-expenses-variable"
-                onclick="window.switchView('view-expenses-variable')"
-              >
-                <span class="nav-subitem-dot"></span>
-                <span>Chi phí biến động</span>
-              </button>
-            </div>
-          </div>
+              <span>Chi phí</span>
+            </span>
+          </button>
         </nav>
       </div>
 
@@ -487,8 +459,7 @@
       <main class="app-main">
         <div id="view-overview" class="app-view active"></div>
         <div id="view-revenue" class="app-view"></div>
-        <div id="view-expenses-fixed" class="app-view"></div>
-        <div id="view-expenses-variable" class="app-view"></div>
+        <div id="view-expenses" class="app-view"></div>
       </main>
     </div>
   </div>
@@ -525,7 +496,7 @@
 
       /**
        * Switch active dashboard view and update sidebar navigation state
-       * @param {string} viewId - 'view-overview' | 'view-revenue' | 'view-expenses-fixed' | 'view-expenses-variable'
+       * @param {string} viewId - 'view-overview' | 'view-revenue' | 'view-expenses'
        * @param {string} [subTab] - Optional sub-tab for view-revenue ('channel' | 'dish')
        */
       window.switchView = function (viewId, subTab) {
@@ -535,13 +506,14 @@
         } else if (viewId === 'view-revenue-dish') {
           viewId = 'view-revenue';
           subTab = 'dish';
+        } else if (viewId === 'view-expenses-fixed' || viewId === 'view-expenses-variable') {
+          viewId = 'view-expenses';
         }
 
         var validViews = [
           'view-overview',
           'view-revenue',
-          'view-expenses-fixed',
-          'view-expenses-variable'
+          'view-expenses'
         ];
         if (validViews.indexOf(viewId) === -1) {
           viewId = 'view-overview';
@@ -572,17 +544,12 @@
         var navRevChannel = document.getElementById('nav-revenue-channel');
         var navRevDish = document.getElementById('nav-revenue-dish');
         var navExpenses = document.getElementById('nav-expenses');
-        var navGroupExpenses = document.getElementById('nav-group-expenses');
-        var navFixed = document.getElementById('nav-expenses-fixed');
-        var navVariable = document.getElementById('nav-expenses-variable');
 
         if (navOverview) navOverview.classList.remove('active');
         if (navRevenue) navRevenue.classList.remove('active');
         if (navRevChannel) navRevChannel.classList.remove('active');
         if (navRevDish) navRevDish.classList.remove('active');
         if (navExpenses) navExpenses.classList.remove('active');
-        if (navFixed) navFixed.classList.remove('active');
-        if (navVariable) navVariable.classList.remove('active');
 
         // Activate matching nav item & call corresponding render hook
         if (viewId === 'view-overview') {
@@ -606,19 +573,10 @@
           } else if (typeof window.renderRevenue === 'function') {
             window.renderRevenue(targetRevTab);
           }
-        } else if (viewId === 'view-expenses-fixed') {
+        } else if (viewId === 'view-expenses') {
           if (navExpenses) navExpenses.classList.add('active');
-          if (navGroupExpenses) navGroupExpenses.classList.add('expanded');
-          if (navFixed) navFixed.classList.add('active');
-          if (typeof window.renderFixedExpenses === 'function') {
-            window.renderFixedExpenses();
-          }
-        } else if (viewId === 'view-expenses-variable') {
-          if (navExpenses) navExpenses.classList.add('active');
-          if (navGroupExpenses) navGroupExpenses.classList.add('expanded');
-          if (navVariable) navVariable.classList.add('active');
-          if (typeof window.renderVariableExpenses === 'function') {
-            window.renderVariableExpenses();
+          if (typeof window.renderExpenses === 'function') {
+            window.renderExpenses();
           }
         }
       };
@@ -640,22 +598,10 @@
       };
 
       /**
-       * Clicking "Chi phí" parent item expands submenu and opens Chi phí cố định if not already in an expense view
+       * Legacy handler kept as alias to unified Chi phí view
        */
       window.handleExpensesMenuClick = function () {
-        var group = document.getElementById('nav-group-expenses');
-        var fixedView = document.getElementById('view-expenses-fixed');
-        var variableView = document.getElementById('view-expenses-variable');
-        var isInExpenses =
-          (fixedView && fixedView.classList.contains('active')) ||
-          (variableView && variableView.classList.contains('active'));
-
-        if (!isInExpenses) {
-          if (group) group.classList.add('expanded');
-          window.switchView('view-expenses-fixed');
-        } else if (group) {
-          group.classList.toggle('expanded');
-        }
+        window.switchView('view-expenses');
       };
 
       /**
@@ -720,8 +666,7 @@
       document.addEventListener('DOMContentLoaded', function () {
         if (typeof window.renderOverview === 'function') window.renderOverview();
         if (typeof window.renderRevenue === 'function') window.renderRevenue();
-        if (typeof window.renderFixedExpenses === 'function') window.renderFixedExpenses();
-        if (typeof window.renderVariableExpenses === 'function') window.renderVariableExpenses();
+        if (typeof window.renderExpenses === 'function') window.renderExpenses();
       });
     })();
   </script>

@@ -1988,6 +1988,51 @@ body.dark-theme .exp-type-radio-card.active {
   transition: width 0.3s ease;
 }
 
+/* ==========================================================================
+   6. UNIFIED EXPENSES (9 CATEGORIES) LEGEND & STACKED BAR UTILITIES
+   ========================================================================== */
+
+.exp-legend-grid,
+.mg-exp-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px 12px;
+  margin-top: 14px;
+}
+
+.exp-legend-item,
+.mg-exp-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--mg-surface-subtle);
+  border: 1px solid var(--mg-border);
+  font-size: 0.78rem;
+  color: var(--mg-text-main);
+}
+
+.exp-legend-swatch,
+.mg-exp-legend-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.exp-stacked-segment {
+  transition: opacity 0.18s ease, filter 0.18s ease;
+  cursor: pointer;
+}
+
+.exp-stacked-segment:hover {
+  opacity: 0.88;
+  filter: brightness(1.06);
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1180px) {
   .kpi-grid,

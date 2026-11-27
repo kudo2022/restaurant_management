@@ -807,7 +807,7 @@
         badge: Number(summary.expenseRatioPercent || 68.0).toFixed(1).replace('.', ',') + '% doanh thu',
         badgeType: 'warning',
         subtext: (summary.expenseEntryCount || 16) + ' khoản chi thực tế từ Google Sheet',
-        targetView: 'view-expenses-fixed',
+        targetView: 'view-expenses',
         accentColor: '#D97724'
       },
       {
@@ -1052,7 +1052,7 @@
     const btnExp = document.getElementById('btn-ov-go-expenses');
     if (btnExp) {
       btnExp.addEventListener('click', function () {
-        navigateToView('view-expenses-fixed');
+        navigateToView('view-expenses');
       });
     }
 
