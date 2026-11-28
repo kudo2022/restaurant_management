@@ -285,54 +285,23 @@
 
           <div class="sidebar-section-label">Nhà hàng</div>
 
-          <!-- 2. DOANH THU (Expandable Parent with 2 Sub-sections: Theo hình thức & Theo món) -->
-          <div class="nav-group expanded" id="nav-group-revenue">
-            <button
-              type="button"
-              id="nav-revenue"
-              class="nav-item"
-              data-target="view-revenue"
-              aria-expanded="true"
-              onclick="window.handleRevenueMenuClick()"
-            >
-              <span class="nav-item-left">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="20" x2="18" y2="10"></line>
-                  <line x1="12" y1="20" x2="12" y2="4"></line>
-                  <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-                <span>Doanh thu</span>
-              </span>
-              <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+          <!-- 2. DOANH THU (Single Unified Tab) -->
+          <button
+            type="button"
+            id="nav-revenue"
+            class="nav-item"
+            data-target="view-revenue"
+            onclick="window.switchView('view-revenue')"
+          >
+            <span class="nav-item-left">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
               </svg>
-            </button>
-
-            <div class="nav-submenu" id="submenu-revenue">
-              <button
-                type="button"
-                id="nav-revenue-channel"
-                class="nav-subitem"
-                data-target="view-revenue"
-                data-rev-tab="channel"
-                onclick="window.switchView('view-revenue', 'channel')"
-              >
-                <span class="nav-subitem-dot"></span>
-                <span>Doanh thu theo hình thức</span>
-              </button>
-              <button
-                type="button"
-                id="nav-revenue-dish"
-                class="nav-subitem"
-                data-target="view-revenue"
-                data-rev-tab="dish"
-                onclick="window.switchView('view-revenue', 'dish')"
-              >
-                <span class="nav-subitem-dot"></span>
-                <span>Doanh thu theo món</span>
-              </button>
-            </div>
-          </div>
+              <span>Doanh thu</span>
+            </span>
+          </button>
 
           <!-- 3. CHI PHÍ (Single Unified Tab) -->
           <button
@@ -473,39 +442,18 @@
   <!-- Shell Navigation & Login Controller -->
   <script>
     (function () {
-      window.currentRevenueSubTab = 'channel';
-
       /**
-       * Sync sidebar active state for Doanh thu sub-items ('channel' | 'dish')
+       * Legacy no-op kept for backward compatibility
        */
-      window.syncRevenueSidebarActive = function (tab) {
-        var resolvedTab = tab === 'dish' ? 'dish' : 'channel';
-        window.currentRevenueSubTab = resolvedTab;
-        var navRevChannel = document.getElementById('nav-revenue-channel');
-        var navRevDish = document.getElementById('nav-revenue-dish');
-        var revView = document.getElementById('view-revenue');
-        var isRevActive = revView && revView.classList.contains('active');
-
-        if (navRevChannel) {
-          navRevChannel.classList.toggle('active', Boolean(isRevActive && resolvedTab === 'channel'));
-        }
-        if (navRevDish) {
-          navRevDish.classList.toggle('active', Boolean(isRevActive && resolvedTab === 'dish'));
-        }
-      };
+      window.syncRevenueSidebarActive = function () {};
 
       /**
        * Switch active dashboard view and update sidebar navigation state
        * @param {string} viewId - 'view-overview' | 'view-revenue' | 'view-expenses'
-       * @param {string} [subTab] - Optional sub-tab for view-revenue ('channel' | 'dish')
        */
-      window.switchView = function (viewId, subTab) {
-        if (viewId === 'view-revenue-channel') {
+      window.switchView = function (viewId) {
+        if (viewId === 'view-revenue-channel' || viewId === 'view-revenue-dish') {
           viewId = 'view-revenue';
-          subTab = 'channel';
-        } else if (viewId === 'view-revenue-dish') {
-          viewId = 'view-revenue';
-          subTab = 'dish';
         } else if (viewId === 'view-expenses-fixed' || viewId === 'view-expenses-variable') {
           viewId = 'view-expenses';
         }
@@ -540,15 +488,10 @@
         // Reset sidebar states
         var navOverview = document.getElementById('nav-overview');
         var navRevenue = document.getElementById('nav-revenue');
-        var navGroupRevenue = document.getElementById('nav-group-revenue');
-        var navRevChannel = document.getElementById('nav-revenue-channel');
-        var navRevDish = document.getElementById('nav-revenue-dish');
         var navExpenses = document.getElementById('nav-expenses');
 
         if (navOverview) navOverview.classList.remove('active');
         if (navRevenue) navRevenue.classList.remove('active');
-        if (navRevChannel) navRevChannel.classList.remove('active');
-        if (navRevDish) navRevDish.classList.remove('active');
         if (navExpenses) navExpenses.classList.remove('active');
 
         // Activate matching nav item & call corresponding render hook
@@ -558,20 +501,9 @@
             window.renderOverview();
           }
         } else if (viewId === 'view-revenue') {
-          var targetRevTab = subTab || window.currentRevenueSubTab || 'channel';
-          window.currentRevenueSubTab = targetRevTab;
           if (navRevenue) navRevenue.classList.add('active');
-          if (navGroupRevenue) navGroupRevenue.classList.add('expanded');
-          if (targetRevTab === 'dish') {
-            if (navRevDish) navRevDish.classList.add('active');
-          } else {
-            if (navRevChannel) navRevChannel.classList.add('active');
-          }
-
-          if (typeof window.switchRevenueTab === 'function') {
-            window.switchRevenueTab(targetRevTab);
-          } else if (typeof window.renderRevenue === 'function') {
-            window.renderRevenue(targetRevTab);
+          if (typeof window.renderRevenue === 'function') {
+            window.renderRevenue();
           }
         } else if (viewId === 'view-expenses') {
           if (navExpenses) navExpenses.classList.add('active');
@@ -582,19 +514,10 @@
       };
 
       /**
-       * Clicking "Doanh thu" parent item expands submenu and opens Doanh thu theo hình thức if not already in view-revenue
+       * Legacy handler kept as alias to unified Doanh thu view
        */
       window.handleRevenueMenuClick = function () {
-        var group = document.getElementById('nav-group-revenue');
-        var revView = document.getElementById('view-revenue');
-        var isInRevenue = revView && revView.classList.contains('active');
-
-        if (!isInRevenue) {
-          if (group) group.classList.add('expanded');
-          window.switchView('view-revenue', window.currentRevenueSubTab || 'channel');
-        } else if (group) {
-          group.classList.toggle('expanded');
-        }
+        window.switchView('view-revenue');
       };
 
       /**
